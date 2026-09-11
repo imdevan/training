@@ -4,21 +4,25 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://devan.gg',
+	base: '/training',
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'Training with Dev',
 			sidebar: [
 				{
-					label: 'Guides',
+					label: 'Overview',
 					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
+						{ label: 'Training with Dev', slug: 'index' },
 					],
 				},
 				{
-					label: 'Reference',
-					items: [{ autogenerate: { directory: 'reference' } }],
+					label: 'Wiki & Reference',
+					items: [
+						{ label: 'Vocabulary & Cues', slug: 'vocab' },
+						{ label: 'Games', slug: 'games' },
+						{ label: 'Learning Theory', slug: 'learning-theory' },
+					],
 				},
 			],
 		}),
