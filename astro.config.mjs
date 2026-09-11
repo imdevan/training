@@ -9,6 +9,10 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Training with Dev',
+			components: {
+				Header: './src/components/Header.astro',
+			},
+			customCss: ['./src/styles/custom.css'],
 			sidebar: [
 				{
 					label: 'Overview',

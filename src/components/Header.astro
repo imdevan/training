@@ -1,0 +1,103 @@
+---
+import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
+import Search from 'virtual:starlight/components/Search';
+import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import config from 'virtual:starlight/user-config';
+
+const shouldRenderSearch =
+	config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+	{ label: 'Vocab', href: `${base}/vocab/`, active: currentPath.includes('/vocab') },
+	{ label: 'Games', href: `${base}/games/`, active: currentPath.includes('/games') },
+	{ label: 'Theory', href: `${base}/learning-theory/`, active: currentPath.includes('/learning-theory') },
+];
+---
+
+<div class="header sl-flex">
+	<div class="left-group sl-flex">
+		<div class="title-wrapper sl-flex">
+			<SiteTitle />
+		</div>
+		<nav class="nav-links sl-hidden md:sl-flex" aria-label="Main Navigation">
+			{navItems.map((item) => (
+				<a
+					href={item.href}
+					class:list={['nav-link', { active: item.active }]}
+					aria-current={item.active ? 'page' : undefined}
+				>
+					{item.label}
+				</a>
+			))}
+		</nav>
+	</div>
+	<div class="right-group sl-flex print:hidden">
+		{shouldRenderSearch && (
+			<div class="search-wrapper">
+				<Search />
+			</div>
+		)}
+		<ThemeSelect />
+		<LanguageSelect />
+	</div>
+</div>
+
+<style>
+	@layer starlight.core {
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 100%;
+			gap: var(--sl-nav-gap);
+			width: 100%;
+		}
+
+		.left-group {
+			align-items: center;
+			gap: 2rem;
+			min-width: 0;
+		}
+
+		.title-wrapper {
+			overflow: clip;
+			padding: 0.25rem;
+			margin: -0.25rem;
+			min-width: 0;
+		}
+
+		.nav-links {
+			align-items: center;
+			gap: 1.5rem;
+		}
+
+		.nav-link {
+			color: var(--sl-color-gray-2);
+			font-size: var(--sl-text-sm);
+			font-weight: 500;
+			text-decoration: none;
+			padding: 0.25rem 0.5rem;
+			border-radius: 0.375rem;
+			transition: color 0.15s ease, background-color 0.15s ease;
+		}
+
+		.nav-link:hover {
+			color: var(--sl-color-white);
+			background-color: var(--sl-color-gray-6);
+		}
+
+		.nav-link.active {
+			color: var(--sl-color-accent-high);
+			font-weight: 600;
+		}
+
+		.right-group {
+			align-items: center;
+			gap: 0.75rem;
+		}
+	}
+</style>
