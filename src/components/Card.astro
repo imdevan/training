@@ -1,0 +1,46 @@
+---
+interface Props {
+  class?: string;
+  style?: string;
+}
+
+const { class: className = '', style = '' } = Astro.props;
+---
+
+<div class:list={['glass-card', className]} style={style}>
+  <slot />
+</div>
+
+<style>
+  .glass-card {
+    background: var(--surface);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+    border-radius: var(--radius, 1rem);
+    padding: 1.5rem 1.75rem;
+    margin-block: 1.5rem;
+    box-shadow:
+      0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
+      0 12px 32px -12px color-mix(in oklab, var(--foreground) 16%, transparent);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  @media (min-width: 50rem) {
+    .glass-card {
+      padding: 2rem 2.25rem;
+    }
+  }
+
+  .glass-card:hover {
+    border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+  }
+
+  .glass-card > :first-child {
+    margin-top: 0;
+  }
+
+  .glass-card > :last-child {
+    margin-bottom: 0;
+  }
+</style>
