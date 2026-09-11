@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  blurb?: string;
+  usefulFor?: string;
+  howToTrain?: string;
+  nonVerbal?: string;
+  open?: boolean;
+}
+
+const { title, blurb, usefulFor, howToTrain, nonVerbal, open = false } = Astro.props;
+---
+
+<details open={open}>
+  <summary><h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;">{title}</h4></summary>
+  <div style="margin-top: 0.75rem;">
+    {blurb && (
+      <p><strong>Blurb:</strong> {blurb}</p>
+    )}
+    {usefulFor && (
+      <p><strong>When it is useful:</strong> {usefulFor}</p>
+    )}
+    {howToTrain && (
+      <p><strong>High level how to train:</strong> {howToTrain}</p>
+    )}
+    {nonVerbal && (
+      <p><strong>Non-verbal cue:</strong> {nonVerbal}</p>
+    )}
+    <slot />
+  </div>
+</details>
