@@ -1,0 +1,258 @@
+---
+import {
+  faDog,
+  faBone,
+  faPaw,
+  faBowlFood,
+  faBaseball,
+  faStar,
+  faRainbow,
+} from "@fortawesome/free-solid-svg-icons";
+import { icon as renderIcon } from "@fortawesome/fontawesome-svg-core";
+
+const iconsMap = {
+  dog: renderIcon(faDog)?.html.join("") || "",
+  bone: renderIcon(faBone)?.html.join("") || "",
+  paw: renderIcon(faPaw)?.html.join("") || "",
+  bowlFood: renderIcon(faBowlFood)?.html.join("") || "",
+  baseball: renderIcon(faBaseball)?.html.join("") || "",
+  star: renderIcon(faStar)?.html.join("") || "",
+  rainbow: renderIcon(faRainbow)?.html.join("") || "",
+};
+---
+
+<div
+  aria-hidden="true"
+  class="parallax-gradient-backdrop"
+></div>
+
+<div
+  id="parallax-bg-layer"
+  aria-hidden="true"
+  class="parallax-container"
+  data-icons={JSON.stringify(iconsMap)}
+></div>
+
+<style>
+  .parallax-gradient-backdrop {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: -20;
+    background: linear-gradient(
+      to bottom,
+      var(--background),
+      var(--background) 50%,
+      color-mix(in oklab, var(--primary-soft) 40%, var(--background))
+    );
+  }
+
+  .parallax-container {
+    pointer-events: none;
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: -10;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  :global(.parallax-icon-item) {
+    position: absolute;
+    display: flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
+    pointer-events: none;
+  }
+
+  :global(.parallax-icon-item svg) {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  const COLORS = [
+    "#00bd70", // primary green
+    "#06d6a0",
+    "#7ce0b0",
+    "#ffd166",
+    "#ef8354",
+    "#4cc9f0",
+    "#b388eb",
+  ];
+
+  const CFG = {
+    pxPerCol: 180,
+    minCols: 3,
+    maxCols: 10,
+    rows: 24,
+    jitter: 0.5,
+    minScale: 0.4,
+    maxScale: 1.2,
+    scaleBias: 2.0,
+    minRotation: -60,
+    maxRotation: 60,
+    minOpacity: 0.15,
+    maxOpacity: 0.6,
+    scrollMinMultiplier: 0.05,
+    scrollMaxMultiplier: 0.35,
+    scrollJitterMin: 0.8,
+    scrollJitterMax: 1.1,
+  };
+
+  function mulberry32(seed: number) {
+    let t = seed >>> 0;
+    return () => {
+      t = (t + 0x6d2b79f5) >>> 0;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function computeCols(width: number): number {
+    const raw = Math.round(width / CFG.pxPerCol);
+    return Math.max(CFG.minCols, Math.min(CFG.maxCols, raw));
+  }
+
+  function initParallax() {
+    const container = document.getElementById("parallax-bg-layer");
+    if (!container) return;
+
+    // Ensure elements are at root of body behind all content stacking contexts
+    const backdrop = document.querySelector(".parallax-gradient-backdrop");
+    if (backdrop && backdrop.parentElement !== document.body) {
+      document.body.prepend(backdrop);
+    }
+    if (container.parentElement !== document.body) {
+      document.body.prepend(container);
+    }
+
+    let iconsData: Record<string, string> = {};
+    try {
+      iconsData = JSON.parse(container.dataset.icons || "{}");
+    } catch {}
+
+    const iconKeys = Object.keys(iconsData);
+    if (iconKeys.length === 0) return;
+
+    let items: Array<{
+      el: HTMLElement;
+      rotation: number;
+      scale: number;
+      speed: number;
+    }> = [];
+
+    function generate(cols: number) {
+      container.innerHTML = "";
+      items = [];
+      const rng = mulberry32(0xb077e);
+      const cellW = 100 / cols;
+      const cellH = 100 / CFG.rows;
+
+      for (let row = 0; row < CFG.rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const key = iconKeys[Math.floor(rng() * iconKeys.length)];
+          const svg = iconsData[key];
+          const color = COLORS[Math.floor(rng() * COLORS.length)];
+          const baseX = (col + 0.5) * cellW;
+          const baseY = (row + 0.5) * cellH;
+          const jx = (rng() - 0.5) * cellW * CFG.jitter * 2;
+          const jy = (rng() - 0.5) * cellH * CFG.jitter * 2;
+
+          const rowNorm = CFG.rows > 1 ? row / (CFG.rows - 1) : 0;
+          const sizeExp = CFG.scaleBias * (1 - rowNorm) + (1 / CFG.scaleBias) * rowNorm;
+          const t = Math.pow(rng(), sizeExp);
+          const scale = CFG.minScale + t * (CFG.maxScale - CFG.minScale);
+          const rotation = CFG.minRotation + rng() * (CFG.maxRotation - CFG.minRotation);
+
+          const scaleNorm = (scale - CFG.minScale) / (CFG.maxScale - CFG.minScale);
+          const opacity = CFG.minOpacity + scaleNorm * (CFG.maxOpacity - CFG.minOpacity);
+          const baseSpeed =
+            CFG.scrollMinMultiplier + scaleNorm * (CFG.scrollMaxMultiplier - CFG.scrollMinMultiplier);
+          const jitter = CFG.scrollJitterMin + rng() * (CFG.scrollJitterMax - CFG.scrollJitterMin);
+          const speed = baseSpeed * jitter;
+
+          const el = document.createElement("div");
+          el.className = "parallax-icon-item";
+          el.style.left = `${(baseX + jx).toFixed(3)}%`;
+          el.style.top = `${(baseY + jy).toFixed(3)}%`;
+          el.style.opacity = opacity.toFixed(3);
+          el.style.color = color;
+          el.style.transform = `rotate(${rotation.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+          el.innerHTML = svg;
+
+          container.appendChild(el);
+          items.push({ el, rotation, scale, speed });
+        }
+      }
+    }
+
+    let currentCols = computeCols(window.innerWidth);
+    generate(currentCols);
+
+    let raf = 0;
+    let currentY = window.scrollY;
+    let targetY = currentY;
+    const EASE = 0.12;
+
+    const updateHeight = () => {
+      container.style.height = `${document.documentElement.scrollHeight}px`;
+    };
+
+    const render = (y: number) => {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (!item.el) continue;
+        const offsetY = -(y * item.speed);
+        item.el.style.transform = `translate3d(0, ${offsetY.toFixed(2)}px, 0) rotate(${item.rotation.toFixed(2)}deg) scale(${item.scale.toFixed(3)})`;
+      }
+    };
+
+    const loop = () => {
+      const diff = targetY - currentY;
+      if (Math.abs(diff) < 0.05) {
+        currentY = targetY;
+        render(currentY);
+        raf = 0;
+        return;
+      }
+      currentY += diff * EASE;
+      render(currentY);
+      raf = requestAnimationFrame(loop);
+    };
+
+    const onScroll = () => {
+      targetY = window.scrollY;
+      if (!raf) raf = requestAnimationFrame(loop);
+    };
+
+    const onResize = () => {
+      updateHeight();
+      const newCols = computeCols(window.innerWidth);
+      if (newCols !== currentCols) {
+        currentCols = newCols;
+        generate(currentCols);
+      }
+    };
+
+    updateHeight();
+    render(currentY);
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    const ro = new ResizeObserver(updateHeight);
+    ro.observe(document.documentElement);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initParallax);
+  } else {
+    initParallax();
+  }
+  document.addEventListener("astro:page-load", initParallax);
+</script>
