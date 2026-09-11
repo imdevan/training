@@ -1,3 +1,292 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&display=swap');
+
+/* ==========================================================================
+   Exact Design Tokens from rover-intake (Opaque Frosted Glass)
+   ========================================================================== */
+
+:root {
+	--radius: 1rem;
+	--sl-font: 'Nunito', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--__sl-font: 'Nunito', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+	/* Light mode tokens */
+	--primary: oklch(0.72 0.17 155);
+	--primary-foreground: oklch(0.99 0 0);
+	--primary-soft: oklch(0.95 0.05 155);
+
+	--background: oklch(0.985 0.01 120);
+	--foreground: oklch(0.18 0.02 160);
+
+	/* Mostly see-through yet heavily frosted surface */
+	--surface: oklch(1 0 0 / 0.82);
+	--surface-foreground: oklch(0.18 0.02 160);
+
+	--card: oklch(1 0 0 / 0.88);
+	--card-foreground: oklch(0.18 0.02 160);
+	--popover: oklch(1 0 0);
+	--popover-foreground: oklch(0.18 0.02 160);
+
+	--secondary: oklch(0.96 0.01 155);
+	--secondary-foreground: oklch(0.22 0.02 160);
+	--muted: oklch(0.95 0.01 155);
+	--muted-foreground: oklch(0.48 0.02 160);
+	--accent: oklch(0.94 0.04 155);
+	--accent-foreground: oklch(0.22 0.02 160);
+
+	--destructive: oklch(0.6 0.22 25);
+	--destructive-foreground: oklch(0.99 0 0);
+
+	--border: oklch(0.88 0.01 155);
+	--input: oklch(0.9 0.01 155);
+	--ring: oklch(0.72 0.17 155);
+	--icon: oklch(0.72 0.17 155 / 0.2);
+
+	/* Starlight theme mappings */
+	--sl-color-accent: var(--primary);
+	--sl-color-accent-high: oklch(0.55 0.18 155);
+	--sl-color-accent-low: var(--primary-soft);
+	--sl-color-bg: var(--background);
+	--sl-color-bg-nav: oklch(1 0 0 / 0.82);
+	--sl-color-bg-sidebar: oklch(1 0 0 / 0.82);
+	--sl-color-hairline: var(--border);
+	--sl-color-hairline-light: oklch(0.92 0.01 155);
+	--sl-color-hairline-shade: color-mix(in oklab, var(--border) 60%, transparent);
+	--sl-color-text: var(--foreground);
+	--sl-color-text-accent: var(--primary);
+	--sl-color-text-invert: var(--primary-foreground);
+	--sl-color-gray-1: var(--foreground);
+	--sl-color-gray-2: oklch(0.35 0.02 160);
+	--sl-color-gray-3: var(--muted-foreground);
+	--sl-color-gray-4: oklch(0.72 0.01 155);
+	--sl-color-gray-5: var(--border);
+	--sl-color-gray-6: var(--muted);
+	--sl-color-white: oklch(0.12 0.02 160);
+	--sl-color-black: var(--card);
+}
+
+:root[data-theme='light'],
+[data-theme='light'] ::backdrop {
+	--sl-color-accent: var(--primary);
+	--sl-color-accent-high: oklch(0.55 0.18 155);
+	--sl-color-accent-low: var(--primary-soft);
+	--sl-color-bg: var(--background);
+	--sl-color-bg-nav: oklch(1 0 0 / 0.82);
+	--sl-color-bg-sidebar: oklch(1 0 0 / 0.82);
+	--sl-color-hairline: var(--border);
+	--sl-color-text: var(--foreground);
+	--sl-color-text-accent: var(--primary);
+	--sl-color-text-invert: var(--primary-foreground);
+	--sl-color-gray-1: var(--foreground);
+	--sl-color-gray-2: oklch(0.35 0.02 160);
+	--sl-color-gray-3: var(--muted-foreground);
+	--sl-color-gray-5: var(--border);
+	--sl-color-gray-6: var(--muted);
+	--sl-color-white: oklch(0.12 0.02 160);
+	--sl-color-black: var(--card);
+}
+
+:root[data-theme='dark'],
+[data-theme='dark'] ::backdrop {
+	/* Dark mode tokens */
+	--background: oklch(0.18 0.02 170);
+	--foreground: oklch(0.97 0.01 120);
+
+	/* Mostly see-through dark frosted surface */
+	--surface: oklch(0.24 0.02 170 / 0.76);
+	--surface-foreground: oklch(0.97 0.01 120);
+
+	--card: oklch(0.25 0.02 170 / 0.82);
+	--card-foreground: oklch(0.97 0.01 120);
+	--popover: oklch(0.23 0.02 170);
+	--popover-foreground: oklch(0.97 0.01 120);
+
+	--primary: oklch(0.76 0.17 155);
+	--primary-foreground: oklch(0.15 0.02 160);
+	--primary-soft: oklch(0.32 0.07 155);
+
+	--secondary: oklch(0.28 0.02 170);
+	--secondary-foreground: oklch(0.97 0.01 120);
+	--muted: oklch(0.27 0.02 170);
+	--muted-foreground: oklch(0.72 0.02 160);
+	--accent: oklch(0.3 0.04 170);
+	--accent-foreground: oklch(0.97 0.01 120);
+
+	--destructive: oklch(0.68 0.22 25);
+	--destructive-foreground: oklch(0.99 0 0);
+
+	--border: oklch(1 0 0 / 0.12);
+	--input: oklch(1 0 0 / 0.14);
+	--ring: oklch(0.76 0.17 155);
+	--icon: oklch(0.76 0.17 155 / 0.18);
+
+	/* Starlight theme mappings */
+	--sl-color-accent: var(--primary);
+	--sl-color-accent-high: oklch(0.85 0.15 155);
+	--sl-color-accent-low: var(--primary-soft);
+	--sl-color-bg: var(--background);
+	--sl-color-bg-nav: oklch(0.22 0.02 170 / 0.78);
+	--sl-color-bg-sidebar: oklch(0.22 0.02 170 / 0.78);
+	--sl-color-hairline: var(--border);
+	--sl-color-hairline-light: oklch(1 0 0 / 0.15);
+	--sl-color-hairline-shade: oklch(0 0 0 / 0.4);
+	--sl-color-text: var(--foreground);
+	--sl-color-text-accent: var(--primary);
+	--sl-color-text-invert: var(--primary-foreground);
+	--sl-color-gray-1: var(--foreground);
+	--sl-color-gray-2: oklch(0.85 0.01 120);
+	--sl-color-gray-3: var(--muted-foreground);
+	--sl-color-gray-4: oklch(0.55 0.02 170);
+	--sl-color-gray-5: var(--border);
+	--sl-color-gray-6: oklch(0.25 0.02 170);
+	--sl-color-white: oklch(1 0 0);
+	--sl-color-black: var(--card);
+}
+
+/* ==========================================================================
+   Typography & Global Smoothing
+   ========================================================================== */
+
+html, body {
+	font-family: var(--sl-font);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	position: relative;
+	min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--sl-font);
+	font-weight: 800;
+	letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   Stacking Order (Keep Parallax Layer Strictly Behind Content)
+   ========================================================================== */
+
+.parallax-gradient-backdrop {
+	position: fixed !important;
+	inset: 0 !important;
+	z-index: -20 !important;
+	pointer-events: none !important;
+}
+
+.parallax-container {
+	position: absolute !important;
+	inset-inline: 0 !important;
+	top: 0 !important;
+	z-index: -10 !important;
+	pointer-events: none !important;
+}
+
+.page,
+.main-frame,
+.content-panel,
+.sl-markdown-content,
+.glass-card,
+details {
+	position: relative;
+	z-index: 1;
+}
+
+/* ==========================================================================
+   Card Wrapper for Title Panel & Layout
+   ========================================================================== */
+
+.content-panel {
+	border-top: none !important;
+	padding: 0.75rem var(--sl-content-pad-x) !important;
+}
+
+/* First content panel (Page Title header card) */
+.content-panel:first-of-type .sl-container {
+	background: var(--surface);
+	backdrop-filter: blur(24px) saturate(180%);
+	-webkit-backdrop-filter: blur(24px) saturate(180%);
+	border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+	border-radius: var(--radius);
+	padding: 1.75rem 2rem;
+	box-shadow:
+		0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
+		0 12px 32px -12px color-mix(in oklab, var(--foreground) 14%, transparent);
+}
+
+/* Second content panel (Markdown content holding individual Cards) */
+.content-panel:nth-of-type(2) .sl-container {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 0;
+}
+
+@media (min-width: 50rem) {
+	.content-panel:first-of-type .sl-container {
+		padding: 2.25rem 2.75rem;
+	}
+}
+
+/* ==========================================================================
+   Glassmorphic Header
+   ========================================================================== */
+
+header.header {
+	position: fixed;
+	z-index: 100 !important;
+	backdrop-filter: blur(24px) saturate(180%);
+	-webkit-backdrop-filter: blur(24px) saturate(180%);
+	background-color: var(--sl-color-bg-nav) !important;
+	border-bottom: 1px solid var(--sl-color-hairline) !important;
+}
+
+/* Compact search button */
+.right-group site-search {
+	display: flex;
+	align-items: center;
+}
+
+.right-group site-search button[data-open-modal] {
+	display: flex !important;
+	align-items: center !important;
+	gap: 0.375rem !important;
+	height: 2.125rem !important;
+	width: auto !important;
+	max-width: none !important;
+	padding-inline-start: 0.625rem !important;
+	padding-inline-end: 0.625rem !important;
+	border: 1px solid var(--sl-color-hairline) !important;
+	border-radius: 0.75rem !important;
+	background-color: var(--card) !important;
+	color: var(--sl-color-gray-2) !important;
+	font-size: var(--sl-text-sm) !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.right-group site-search button[data-open-modal]:hover {
+	border-color: var(--primary) !important;
+	color: var(--foreground) !important;
+	box-shadow: 0 0 16px -4px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+
+.right-group site-search button[data-open-modal] span.sl-hidden.md\:sl-block {
+	display: none !important;
+}
+
+.right-group site-search button[data-open-modal] kbd {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 0.125rem !important;
+	font-size: var(--sl-text-2xs) !important;
+	padding: 0.125rem 0.375rem !important;
+	background-color: var(--sl-color-gray-6) !important;
+	border-radius: 0.375rem !important;
+}
+
+/* ==========================================================================
+   Desktop vs Mobile Sidebar & Centering
+   ========================================================================== */
+
 @media (min-width: 50rem) {
 	/* Hide desktop left navigation sidebar */
 	.sidebar-pane,
@@ -21,7 +310,7 @@
 }
 
 @media (min-width: 72rem) {
-	/* Ensure Table of Contents (On this page) has full comfortable width */
+	/* Ensure Table of Contents has full comfortable width and card appearance */
 	.right-sidebar-container {
 		width: var(--sl-sidebar-width) !important;
 		min-width: 15rem !important;
@@ -33,55 +322,84 @@
 		width: var(--sl-sidebar-width) !important;
 		min-width: 15rem !important;
 		max-width: 18.75rem !important;
-		padding-inline: 1.25rem !important;
+		padding: 1.25rem !important;
+		background: var(--surface) !important;
+		backdrop-filter: blur(24px) saturate(180%) !important;
+		-webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+		border: 1px solid color-mix(in oklab, var(--border) 70%, transparent) !important;
+		border-radius: var(--radius) !important;
+		margin-top: calc(var(--sl-nav-height) + 1.25rem) !important;
+		margin-inline: 0.75rem !important;
+		height: auto !important;
+		max-height: calc(100vh - var(--sl-nav-height) - 3rem) !important;
+		box-shadow:
+			0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
+			0 12px 32px -12px color-mix(in oklab, var(--foreground) 14%, transparent) !important;
 	}
 
 	/* Main content occupies the remaining center space */
 	[data-has-sidebar][data-has-toc] .main-pane {
-		width: calc(100% - var(--sl-sidebar-width)) !important;
+		width: calc(100% - var(--sl-sidebar-width) - 1.5rem) !important;
 		max-width: 100% !important;
 		--sl-content-margin-inline: auto !important;
 	}
 }
 
-/* Compact search button next to theme switcher */
-.right-group site-search {
-	display: flex;
-	align-items: center;
+/* ==========================================================================
+   Cue Accordion Cards (details element)
+   ========================================================================== */
+
+details {
+	background: var(--card) !important;
+	backdrop-filter: blur(24px) saturate(180%) !important;
+	-webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+	border: 1px solid var(--border) !important;
+	border-radius: 0.875rem !important;
+	padding: 1rem 1.25rem !important;
+	margin-block: 0.875rem !important;
+	box-shadow: 0 1px 3px color-mix(in oklab, var(--foreground) 4%, transparent) !important;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-.right-group site-search button[data-open-modal] {
-	display: flex !important;
-	align-items: center !important;
-	gap: 0.375rem !important;
-	height: 2rem !important;
-	width: auto !important;
-	max-width: none !important;
-	padding-inline-start: 0.5rem !important;
-	padding-inline-end: 0.5rem !important;
-	border: 1px solid var(--sl-color-gray-5) !important;
-	border-radius: 0.5rem !important;
-	background-color: var(--sl-color-black) !important;
-	color: var(--sl-color-gray-2) !important;
+details:hover {
+	border-color: var(--primary) !important;
+	box-shadow: 0 0 20px -5px color-mix(in oklab, var(--primary) 35%, transparent) !important;
+}
+
+details[open] {
+	border-color: var(--primary) !important;
+}
+
+details summary {
+	cursor: pointer;
+	font-weight: 700;
+	color: var(--foreground);
+	user-select: none;
+	transition: color 0.15s ease;
+}
+
+details summary:hover {
+	color: var(--primary);
+}
+
+details h5 {
+	color: var(--sl-color-accent-high) !important;
 	font-size: var(--sl-text-sm) !important;
-	cursor: pointer !important;
+	font-weight: 700 !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.05em !important;
+	margin-top: 0.875rem !important;
+	margin-bottom: 0.25rem !important;
 }
 
-.right-group site-search button[data-open-modal]:hover {
-	border-color: var(--sl-color-gray-2) !important;
-	color: var(--sl-color-white) !important;
-}
+/* ==========================================================================
+   Asides & Callouts
+   ========================================================================== */
 
-.right-group site-search button[data-open-modal] span.sl-hidden.md\:sl-block {
-	display: none !important;
-}
-
-.right-group site-search button[data-open-modal] kbd {
-	display: inline-flex !important;
-	align-items: center !important;
-	gap: 0.125rem !important;
-	font-size: var(--sl-text-2xs) !important;
-	padding: 0.125rem 0.25rem !important;
-	background-color: var(--sl-color-gray-6) !important;
-	border-radius: 0.25rem !important;
+.starlight-aside {
+	border-radius: var(--radius) !important;
+	backdrop-filter: blur(20px) saturate(180%) !important;
+	-webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+	border: 1px solid var(--sl-color-hairline) !important;
+	box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.06) !important;
 }
