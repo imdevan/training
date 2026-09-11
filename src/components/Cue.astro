@@ -15,16 +15,25 @@ const { title, blurb, usefulFor, howToTrain, nonVerbal, open = false } = Astro.p
   <summary><h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;">{title}</h4></summary>
   <div style="margin-top: 0.75rem;">
     {blurb && (
-      <p><strong>Blurb:</strong> {blurb}</p>
+      <p>{blurb}</p>
     )}
     {usefulFor && (
-      <p><strong>When it is useful:</strong> {usefulFor}</p>
+      <div>
+        <h5>When it is useful</h5>
+        <p>{usefulFor}</p>
+      </div>
     )}
     {howToTrain && (
-      <p><strong>High level how to train:</strong> {howToTrain}</p>
+      <div>
+        <h5>High level how to train</h5>
+        <p>{howToTrain}</p>
+      </div>
     )}
     {nonVerbal && (
-      <p><strong>Non-verbal cue:</strong> {nonVerbal}</p>
+      <div>
+        <h5>Non-verbal cue</h5>
+        <p>{nonVerbal}</p>
+      </div>
     )}
     <slot />
   </div>
