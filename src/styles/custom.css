@@ -1,0 +1,87 @@
+@media (min-width: 50rem) {
+	/* Hide desktop left navigation sidebar */
+	.sidebar-pane,
+	sl-sidebar-pane#starlight__sidebar,
+	nav.sidebar sl-sidebar-pane {
+		display: none !important;
+	}
+
+	/* Remove left offset caused by desktop sidebar */
+	:root,
+	html,
+	:root[data-has-sidebar],
+	html[data-has-sidebar],
+	[data-has-sidebar] {
+		--sl-content-inline-start: 0rem !important;
+	}
+
+	.main-frame {
+		padding-inline-start: 0 !important;
+	}
+}
+
+@media (min-width: 72rem) {
+	/* Ensure Table of Contents (On this page) has full comfortable width */
+	.right-sidebar-container {
+		width: var(--sl-sidebar-width) !important;
+		min-width: 15rem !important;
+		max-width: 18.75rem !important;
+		flex-shrink: 0 !important;
+	}
+
+	.right-sidebar {
+		width: var(--sl-sidebar-width) !important;
+		min-width: 15rem !important;
+		max-width: 18.75rem !important;
+		padding-inline: 1.25rem !important;
+	}
+
+	/* Main content occupies the remaining center space */
+	[data-has-sidebar][data-has-toc] .main-pane {
+		width: calc(100% - var(--sl-sidebar-width)) !important;
+		max-width: 100% !important;
+		--sl-content-margin-inline: auto !important;
+	}
+}
+
+/* Compact search button next to theme switcher */
+.right-group site-search {
+	display: flex;
+	align-items: center;
+}
+
+.right-group site-search button[data-open-modal] {
+	display: flex !important;
+	align-items: center !important;
+	gap: 0.375rem !important;
+	height: 2rem !important;
+	width: auto !important;
+	max-width: none !important;
+	padding-inline-start: 0.5rem !important;
+	padding-inline-end: 0.5rem !important;
+	border: 1px solid var(--sl-color-gray-5) !important;
+	border-radius: 0.5rem !important;
+	background-color: var(--sl-color-black) !important;
+	color: var(--sl-color-gray-2) !important;
+	font-size: var(--sl-text-sm) !important;
+	cursor: pointer !important;
+}
+
+.right-group site-search button[data-open-modal]:hover {
+	border-color: var(--sl-color-gray-2) !important;
+	color: var(--sl-color-white) !important;
+}
+
+.right-group site-search button[data-open-modal] span.sl-hidden.md\:sl-block {
+	display: none !important;
+}
+
+.right-group site-search button[data-open-modal] kbd {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 0.125rem !important;
+	font-size: var(--sl-text-2xs) !important;
+	padding: 0.125rem 0.25rem !important;
+	background-color: var(--sl-color-gray-6) !important;
+	border-radius: 0.25rem !important;
+}
