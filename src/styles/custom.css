@@ -298,7 +298,8 @@ a.site-title {
 
 mobile-starlight-toc,
 nav[aria-labelledby="starlight__on-this-page--mobile"],
-#starlight__mobile-toc {
+#starlight__mobile-toc,
+.sl-menu-button {
 	display: none !important;
 }
 
