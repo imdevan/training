@@ -284,8 +284,18 @@ header.header {
 }
 
 /* ==========================================================================
-   Desktop vs Mobile Sidebar & Centering
+   Hide Mobile "On this page" Table of Contents Menu
    ========================================================================== */
+
+:root {
+	--sl-mobile-toc-height: 0rem !important;
+}
+
+mobile-starlight-toc,
+nav[aria-labelledby="starlight__on-this-page--mobile"],
+#starlight__mobile-toc {
+	display: none !important;
+}
 
 @media (min-width: 50rem) {
 	/* Hide desktop left navigation sidebar */
