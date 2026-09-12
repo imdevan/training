@@ -237,17 +237,17 @@ details {
 	display: none !important;
 }
 
-:global([data-has-sidebar]) .header {
+[data-has-sidebar] .header {
 	padding-inline-end: var(--sl-nav-pad-x) !important;
 }
 
 /* Shorten site title on mobile so it doesn't get clipped */
 @media (max-width: 49.9999rem) {
-	.title-wrapper :global(.site-title span) {
+	.title-wrapper .site-title span {
 		font-size: 0;
 	}
 
-	.title-wrapper :global(.site-title span)::after {
+	.title-wrapper .site-title span::after {
 		content: 'Training';
 		font-size: var(--sl-text-h4);
 	}
