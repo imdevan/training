@@ -89,7 +89,10 @@ const iconsMap = {
     pxPerCol: 180,
     minCols: 3,
     maxCols: 10,
-    rows: 24,
+    /** Pixels of page height per row of icons – calibrated so the vocab page
+     *  (the tallest page) gets ~24 rows. Shorter pages get proportionally fewer. */
+    pxPerRow: 200,
+    minRows: 3,
     jitter: 0.5,
     minScale: 0.4,
     maxScale: 1.2,
@@ -119,7 +122,21 @@ const iconsMap = {
     return Math.max(CFG.minCols, Math.min(CFG.maxCols, raw));
   }
 
+  function computeRows(pageHeight: number): number {
+    const raw = Math.round(pageHeight / CFG.pxPerRow);
+    return Math.max(CFG.minRows, raw);
+  }
+
+  // Teardown handle for the previous page's parallax
+  let cleanup: (() => void) | null = null;
+
   function initParallax() {
+    // Tear down previous instance (listeners, animation frame)
+    if (cleanup) {
+      cleanup();
+      cleanup = null;
+    }
+
     const container = document.getElementById("parallax-bg-layer");
     if (!container) return;
 
@@ -140,6 +157,9 @@ const iconsMap = {
     const iconKeys = Object.keys(iconsData);
     if (iconKeys.length === 0) return;
 
+    // Snapshot the page height once — accordion / cue expansions won't change it
+    const lockedHeight = document.documentElement.scrollHeight;
+
     let items: Array<{
       el: HTMLElement;
       rotation: number;
@@ -147,14 +167,14 @@ const iconsMap = {
       speed: number;
     }> = [];
 
-    function generate(cols: number) {
+    function generate(cols: number, rows: number) {
       container.innerHTML = "";
       items = [];
       const rng = mulberry32(0xb077e);
       const cellW = 100 / cols;
-      const cellH = 100 / CFG.rows;
+      const cellH = 100 / rows;
 
-      for (let row = 0; row < CFG.rows; row++) {
+      for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
           const key = iconKeys[Math.floor(rng() * iconKeys.length)];
           const svg = iconsData[key];
@@ -164,7 +184,7 @@ const iconsMap = {
           const jx = (rng() - 0.5) * cellW * CFG.jitter * 2;
           const jy = (rng() - 0.5) * cellH * CFG.jitter * 2;
 
-          const rowNorm = CFG.rows > 1 ? row / (CFG.rows - 1) : 0;
+          const rowNorm = rows > 1 ? row / (rows - 1) : 0;
           const sizeExp = CFG.scaleBias * (1 - rowNorm) + (1 / CFG.scaleBias) * rowNorm;
           const t = Math.pow(rng(), sizeExp);
           const scale = CFG.minScale + t * (CFG.maxScale - CFG.minScale);
@@ -193,16 +213,16 @@ const iconsMap = {
     }
 
     let currentCols = computeCols(window.innerWidth);
-    generate(currentCols);
+    const lockedRows = computeRows(lockedHeight);
+
+    // Set container height once — never update it after init
+    container.style.height = `${lockedHeight}px`;
+    generate(currentCols, lockedRows);
 
     let raf = 0;
     let currentY = window.scrollY;
     let targetY = currentY;
     const EASE = 0.12;
-
-    const updateHeight = () => {
-      container.style.height = `${document.documentElement.scrollHeight}px`;
-    };
 
     const render = (y: number) => {
       for (let i = 0; i < items.length; i++) {
@@ -232,21 +252,28 @@ const iconsMap = {
     };
 
     const onResize = () => {
-      updateHeight();
+      // Only recalculate columns on viewport width change — rows stay locked
       const newCols = computeCols(window.innerWidth);
       if (newCols !== currentCols) {
         currentCols = newCols;
-        generate(currentCols);
+        generate(currentCols, lockedRows);
       }
     };
 
-    updateHeight();
     render(currentY);
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
-    const ro = new ResizeObserver(updateHeight);
-    ro.observe(document.documentElement);
+
+    // Store cleanup so the next init can tear this instance down
+    cleanup = () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    };
   }
 
   if (document.readyState === "loading") {
@@ -256,3 +283,4 @@ const iconsMap = {
   }
   document.addEventListener("astro:page-load", initParallax);
 </script>
+
