@@ -491,3 +491,31 @@ details h5 {
 	border: 1px solid var(--sl-color-hairline) !important;
 	box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.06) !important;
 }
+
+/* ==========================================================================
+   Pagination Prev / Next Buttons (Match Main Card Opacity)
+   ========================================================================== */
+
+.pagination-links a {
+	background: var(--surface) !important;
+	backdrop-filter: blur(24px) saturate(180%) !important;
+	-webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+	border: 1px solid color-mix(in oklab, var(--border) 70%, transparent) !important;
+	border-radius: var(--radius) !important;
+	padding: 1.25rem 1.5rem !important;
+	box-shadow:
+		0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
+		0 12px 32px -12px color-mix(in oklab, var(--foreground) 14%, transparent) !important;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important;
+}
+
+.pagination-links a:hover {
+	border-color: color-mix(in oklab, var(--primary) 50%, var(--border)) !important;
+	box-shadow:
+		0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
+		0 16px 36px -12px color-mix(in oklab, var(--primary) 25%, transparent) !important;
+}
+
+.pagination-links a:hover .link-title {
+	color: var(--primary) !important;
+}
