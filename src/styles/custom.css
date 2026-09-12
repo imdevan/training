@@ -226,6 +226,34 @@ details {
 }
 
 /* ==========================================================================
+   Mobile Header Fixes
+   Custom Header.astro already provides its own mobile nav toggle/drawer, so
+   hide Starlight's default sidebar toggle button and stop it from reserving
+   extra space on the right side of the header (which was pushing our menu
+   button away from the edge on mobile).
+   ========================================================================== */
+
+.sl-menu-button {
+	display: none !important;
+}
+
+:global([data-has-sidebar]) .header {
+	padding-inline-end: var(--sl-nav-pad-x) !important;
+}
+
+/* Shorten site title on mobile so it doesn't get clipped */
+@media (max-width: 49.9999rem) {
+	.title-wrapper :global(.site-title span) {
+		font-size: 0;
+	}
+
+	.title-wrapper :global(.site-title span)::after {
+		content: 'Training';
+		font-size: var(--sl-text-h4);
+	}
+}
+
+/* ==========================================================================
    Glassmorphic Header
    ========================================================================== */
 
