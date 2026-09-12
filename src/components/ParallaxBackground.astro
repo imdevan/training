@@ -33,18 +33,24 @@ const iconsMap = {
   data-icons={JSON.stringify(iconsMap)}
 ></div>
 
+<div
+  aria-hidden="true"
+  class="parallax-fade-overlay"
+></div>
+
 <style>
   .parallax-gradient-backdrop {
     pointer-events: none;
     position: fixed;
     inset: 0;
     z-index: -20;
-    background: linear-gradient(
-      to bottom,
-      var(--background),
-      var(--background) 50%,
-      color-mix(in oklab, var(--primary-soft) 40%, var(--background))
-    );
+    background: var(--background);
+    /* background: linear-gradient( */
+    /*   to bottom, */
+    /*   transparent, */
+    /*   transparent 50%, */
+    /*   var(--background) */
+    /* ); */
   }
 
   .parallax-container {
@@ -55,6 +61,19 @@ const iconsMap = {
     z-index: -10;
     overflow: hidden;
     min-height: 100vh;
+  }
+
+  .parallax-fade-overlay {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: -5;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      transparent 61.8%,
+      var(--background)
+    );
   }
 
   :global(.parallax-icon-item) {
@@ -147,6 +166,10 @@ const iconsMap = {
     }
     if (container.parentElement !== document.body) {
       document.body.prepend(container);
+    }
+    const overlay = document.querySelector(".parallax-fade-overlay");
+    if (overlay && overlay.parentElement !== document.body) {
+      document.body.insertBefore(overlay, container.nextSibling);
     }
 
     let iconsData: Record<string, string> = {};
