@@ -310,38 +310,58 @@ header.header {
 }
 
 @media (min-width: 72rem) {
-	/* Ensure Table of Contents has full comfortable width and card appearance */
+	/* Ensure Table of Contents has full comfortable width, card appearance, and is centered between content and edge of screen */
 	.right-sidebar-container {
-		width: var(--sl-sidebar-width) !important;
-		min-width: 15rem !important;
-		max-width: 18.75rem !important;
+		width: max(var(--sl-sidebar-width), calc((100% - var(--sl-content-width)) / 2)) !important;
+		display: flex !important;
+		justify-content: center !important;
+		align-items: flex-start !important;
+		position: relative !important;
 		flex-shrink: 0 !important;
+		border: none !important;
+		padding: 0 !important;
 	}
 
 	.right-sidebar {
+		position: sticky !important;
+		top: calc(var(--sl-nav-height) + 0.75rem) !important;
 		width: var(--sl-sidebar-width) !important;
-		min-width: 15rem !important;
-		max-width: 18.75rem !important;
+		min-width: 0 !important;
+		max-width: calc(100% - 1.5rem) !important;
 		padding: 1.25rem !important;
 		background: var(--surface) !important;
 		backdrop-filter: blur(24px) saturate(180%) !important;
 		-webkit-backdrop-filter: blur(24px) saturate(180%) !important;
 		border: 1px solid color-mix(in oklab, var(--border) 70%, transparent) !important;
 		border-radius: var(--radius) !important;
-		margin-top: calc(var(--sl-nav-height) + 1.25rem) !important;
-		margin-inline: 0.75rem !important;
+		margin-top: 0.75rem !important;
+		margin-inline: auto !important;
 		height: auto !important;
-		max-height: calc(100vh - var(--sl-nav-height) - 3rem) !important;
+		max-height: calc(100vh - var(--sl-nav-height) - 2.5rem) !important;
 		box-shadow:
 			0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
 			0 12px 32px -12px color-mix(in oklab, var(--foreground) 14%, transparent) !important;
 	}
 
-	/* Main content occupies the remaining center space */
-	[data-has-sidebar][data-has-toc] .main-pane {
-		width: calc(100% - var(--sl-sidebar-width) - 1.5rem) !important;
+	.right-sidebar-panel {
+		padding: 0 !important;
+	}
+
+	.right-sidebar-panel .sl-container {
+		width: 100% !important;
 		max-width: 100% !important;
-		--sl-content-margin-inline: auto !important;
+	}
+
+	/* Main content occupies the remaining center space and centers content on screen */
+	[data-has-sidebar][data-has-toc] .main-pane,
+	[data-has-toc] .main-pane {
+		width: min(calc(100% - var(--sl-sidebar-width)), calc((100% + var(--sl-content-width)) / 2)) !important;
+		max-width: 100% !important;
+		--sl-content-margin-inline: auto 0 !important;
+	}
+
+	.content-panel {
+		padding-inline: 0 !important;
 	}
 }
 
