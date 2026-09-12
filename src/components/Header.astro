@@ -159,7 +159,27 @@ const navItems = [
 		closeBtn?.addEventListener('click', closeDrawer);
 
 		drawer.querySelectorAll('a').forEach((link) => {
-			link.addEventListener('click', closeDrawer);
+			link.addEventListener('click', () => {
+				const href = link.getAttribute('href');
+				if (!href) return;
+
+				const targetUrl = new URL(href, window.location.origin);
+				const isCurrentPage =
+					targetUrl.pathname.replace(/\/$/, '') === window.location.pathname.replace(/\/$/, '');
+
+				if (isCurrentPage) {
+					closeDrawer();
+				} else {
+					link.classList.add('navigating');
+					document.body.style.overflow = '';
+				}
+			});
+		});
+
+		window.addEventListener('pageshow', (e) => {
+			if (e.persisted) {
+				closeDrawer();
+			}
 		});
 
 		window.addEventListener('keydown', (e) => {
@@ -328,22 +348,33 @@ const navItems = [
 			border: 1px solid transparent;
 			background: transparent;
 
-			/* Slower, deliberate fade in and slide to the left */
+			/* Initial state when closed */
 			opacity: 0;
 			transform: translateX(2.5rem);
+			transition:
+				background-color 0.2s ease,
+				border-color 0.2s ease,
+				color 0.2s ease;
+		}
+
+		/* Cascading deliberate slide-to-left and fade-in only when opening */
+		.mobile-nav-drawer.is-open .drawer-link {
+			opacity: 1;
+			transform: translateX(0);
 			transition:
 				opacity 550ms cubic-bezier(0.16, 1, 0.3, 1),
 				transform 550ms cubic-bezier(0.16, 1, 0.3, 1),
 				background-color 0.2s ease,
 				border-color 0.2s ease,
 				color 0.2s ease;
-			transition-delay: 0ms;
+			transition-delay: calc(120ms + var(--item-index, 0) * 75ms);
 		}
 
-		.mobile-nav-drawer.is-open .drawer-link {
-			opacity: 1;
-			transform: translateX(0);
-			transition-delay: calc(120ms + var(--item-index, 0) * 75ms);
+		.drawer-link.navigating {
+			background: var(--card) !important;
+			border-color: var(--primary) !important;
+			color: var(--primary) !important;
+			opacity: 0.85 !important;
 		}
 
 		.drawer-link:hover {
