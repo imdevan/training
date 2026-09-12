@@ -238,6 +238,11 @@ header.header {
 	border-bottom: 1px solid var(--sl-color-hairline) !important;
 }
 
+a.site-title {
+	font-weight: 900 !important;
+	font-weight: 1000 !important;
+}
+
 /* Compact search button */
 .right-group site-search {
 	display: flex;
