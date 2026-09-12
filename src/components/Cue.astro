@@ -11,30 +11,91 @@ interface Props {
 const { title, blurb, usefulFor, howToTrain, nonVerbal, open = false } = Astro.props;
 ---
 
-<details open={open}>
+<details class:list={['cue-accordion', { 'is-open': open }]} open={open}>
   <summary><h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;">{title}</h4></summary>
-  <div style="margin-top: 0.75rem;">
-    {blurb && (
-      <p>{blurb}</p>
-    )}
-    {usefulFor && (
-      <div>
-        <h5>When it is useful</h5>
-        <p>{usefulFor}</p>
-      </div>
-    )}
-    {howToTrain && (
-      <div>
-        <h5>High level how to train</h5>
-        <p>{howToTrain}</p>
-      </div>
-    )}
-    {nonVerbal && (
-      <div>
-        <h5>Non-verbal cue</h5>
-        <p>{nonVerbal}</p>
-      </div>
-    )}
-    <slot />
+  <div class="cue-content-wrapper" aria-hidden={!open}>
+    <div class="cue-content-inner">
+      {blurb && (
+        <p>{blurb}</p>
+      )}
+      {usefulFor && (
+        <div>
+          <h5>When it is useful</h5>
+          <p>{usefulFor}</p>
+        </div>
+      )}
+      {howToTrain && (
+        <div>
+          <h5>High level how to train</h5>
+          <p>{howToTrain}</p>
+        </div>
+      )}
+      {nonVerbal && (
+        <div>
+          <h5>Non-verbal cue</h5>
+          <p>{nonVerbal}</p>
+        </div>
+      )}
+      <slot />
+    </div>
   </div>
 </details>
+
+<script>
+  function setupCueAccordions() {
+    document.querySelectorAll<HTMLDetailsElement>('details.cue-accordion').forEach((details) => {
+      if (details.dataset.cueBound === 'true') return;
+      details.dataset.cueBound = 'true';
+
+      const summary = details.querySelector('summary');
+      const content = details.querySelector<HTMLElement>('.cue-content-wrapper');
+      if (!summary || !content) return;
+
+      if (details.hasAttribute('open')) {
+        details.classList.add('is-open');
+      }
+
+      let closeTimeout: number | undefined;
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.clearTimeout(closeTimeout);
+
+        const willOpen = !details.classList.contains('is-open');
+
+        if (willOpen) {
+          details.setAttribute('open', '');
+          // Force layout reflow so transition starts cleanly from 0fr / opacity 0
+          void content.offsetHeight;
+          requestAnimationFrame(() => {
+            details.classList.add('is-open');
+            content.removeAttribute('aria-hidden');
+          });
+        } else {
+          details.classList.remove('is-open');
+          content.setAttribute('aria-hidden', 'true');
+
+          const handleTransitionEnd = (evt: TransitionEvent) => {
+            if (evt.target !== content || evt.propertyName !== 'grid-template-rows') return;
+            content.removeEventListener('transitionend', handleTransitionEnd);
+            if (!details.classList.contains('is-open')) {
+              details.removeAttribute('open');
+            }
+          };
+
+          content.addEventListener('transitionend', handleTransitionEnd);
+
+          closeTimeout = window.setTimeout(() => {
+            content.removeEventListener('transitionend', handleTransitionEnd);
+            if (!details.classList.contains('is-open')) {
+              details.removeAttribute('open');
+            }
+          }, 350);
+        }
+      });
+    });
+  }
+
+  setupCueAccordions();
+  document.addEventListener('astro:page-load', setupCueAccordions);
+</script>
