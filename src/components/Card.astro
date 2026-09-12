@@ -23,17 +23,12 @@ const { class: className = '', style = '' } = Astro.props;
     box-shadow:
       0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
       0 12px 32px -12px color-mix(in oklab, var(--foreground) 16%, transparent);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   @media (min-width: 50rem) {
     .glass-card {
       padding: 2rem 2.25rem;
     }
-  }
-
-  .glass-card:hover {
-    border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
   }
 
   .glass-card > :first-child {
