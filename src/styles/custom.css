@@ -428,7 +428,6 @@ details {
 
 details:hover {
 	border-color: var(--primary) !important;
-	box-shadow: 0 0 20px -5px color-mix(in oklab, var(--primary) 35%, transparent) !important;
 }
 
 details[open]:not(.cue-accordion),
