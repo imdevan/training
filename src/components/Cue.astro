@@ -57,7 +57,10 @@ const { title, blurb, usefulFor, howToTrain, nonVerbal, open = false } = Astro.p
 
       let closeTimeout: number | undefined;
 
-      summary.addEventListener('click', (e) => {
+      details.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('.cue-content-wrapper')) return;
+
         e.preventDefault();
         window.clearTimeout(closeTimeout);
 

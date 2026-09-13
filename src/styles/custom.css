@@ -435,12 +435,28 @@ details.is-open {
 	border-color: var(--primary) !important;
 }
 
+details.cue-accordion {
+	cursor: pointer;
+}
+
+.cue-content-inner {
+	cursor: auto;
+}
+
 details summary {
 	cursor: pointer;
 	font-weight: 700;
 	color: var(--foreground);
 	user-select: none;
 	transition: color 0.15s ease;
+	outline: none;
+}
+
+details.cue-accordion:focus-visible,
+details.cue-accordion summary:focus-visible {
+	outline: 2px solid var(--primary);
+	outline-offset: 2px;
+	border-radius: 0.5rem;
 }
 
 details summary:hover {
