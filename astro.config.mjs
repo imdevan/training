@@ -25,8 +25,11 @@ export default defineConfig({
 					items: [
 						{ label: 'Vocabulary & Cues', slug: 'vocab' },
 						{ label: 'Games', slug: 'games' },
-						{ label: 'Learning Theory', slug: 'learning-theory' },
 					],
+				},
+				{
+					label: 'Theory',
+					items: [{ autogenerate: { directory: 'theory' } }],
 				},
 			],
 		}),
