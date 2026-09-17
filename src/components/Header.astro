@@ -12,10 +12,15 @@ const shouldRenderSearch =
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const currentPath = Astro.url.pathname;
 
+const theoryItems = [
+	{ label: 'Learning Theory', href: `${base}/theory/learning/` },
+	{ label: 'Trick Training', href: `${base}/theory/trick-training/` },
+];
+
 const navItems = [
 	{ label: 'Vocab', href: `${base}/vocab/`, active: currentPath.includes('/vocab') },
 	{ label: 'Games', href: `${base}/games/`, active: currentPath.includes('/games') },
-	{ label: 'Theory', href: `${base}/learning-theory/`, active: currentPath.includes('/learning-theory') },
+	{ label: 'Theory', href: `${base}/theory/`, active: currentPath.includes('/theory'), children: theoryItems },
 ];
 ---
 
@@ -27,15 +32,49 @@ const navItems = [
 			<SiteTitle />
 		</div>
 		<nav class="nav-links sl-hidden md:sl-flex" aria-label="Main Navigation">
-			{navItems.map((item) => (
-				<a
-					href={item.href}
-					class:list={['nav-link', { active: item.active }]}
-					aria-current={item.active ? 'page' : undefined}
-				>
-					{item.label}
-				</a>
-			))}
+			{navItems.map((item) =>
+				item.children ? (
+					<div class="nav-dropdown">
+						<button
+							type="button"
+							class:list={['nav-link', 'nav-dropdown-trigger', { active: item.active }]}
+							aria-expanded="false"
+							aria-haspopup="true"
+						>
+							{item.label}
+							<svg
+								class="nav-dropdown-caret"
+								xmlns="http://www.w3.org/2000/svg"
+								width="12"
+								height="12"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<polyline points="6 9 12 15 18 9"></polyline>
+							</svg>
+						</button>
+						<div class="nav-dropdown-menu">
+							{item.children.map((child) => (
+								<a href={child.href} class="nav-dropdown-link">
+									{child.label}
+								</a>
+							))}
+						</div>
+					</div>
+				) : (
+					<a
+						href={item.href}
+						class:list={['nav-link', { active: item.active }]}
+						aria-current={item.active ? 'page' : undefined}
+					>
+						{item.label}
+					</a>
+				)
+			)}
 		</nav>
 	</div>
 	<div class="right-group sl-flex print:hidden">
@@ -189,8 +228,67 @@ const navItems = [
 		});
 	}
 
+	let navDropdownGlobalsBound = false;
+
+	function setupNavDropdowns() {
+		document.querySelectorAll('.nav-dropdown').forEach((dropdown) => {
+			if (dropdown instanceof HTMLElement && dropdown.dataset.dropdownBound === 'true') return;
+			if (dropdown instanceof HTMLElement) dropdown.dataset.dropdownBound = 'true';
+
+			const trigger = dropdown.querySelector('.nav-dropdown-trigger');
+			if (!trigger) return;
+
+			const close = () => {
+				dropdown.classList.remove('is-open');
+				trigger.setAttribute('aria-expanded', 'false');
+			};
+
+			const toggle = () => {
+				const isOpen = dropdown.classList.contains('is-open');
+				document.querySelectorAll('.nav-dropdown.is-open').forEach((other) => {
+					if (other !== dropdown) {
+						other.classList.remove('is-open');
+						other.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+					}
+				});
+				dropdown.classList.toggle('is-open', !isOpen);
+				trigger.setAttribute('aria-expanded', String(!isOpen));
+			};
+
+			trigger.addEventListener('click', (e) => {
+				e.stopPropagation();
+				toggle();
+			});
+		});
+
+		if (navDropdownGlobalsBound) return;
+		navDropdownGlobalsBound = true;
+
+		document.addEventListener('click', (e) => {
+			document.querySelectorAll('.nav-dropdown.is-open').forEach((dropdown) => {
+				if (!(e.target instanceof Node) || !dropdown.contains(e.target)) {
+					dropdown.classList.remove('is-open');
+					dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+				}
+			});
+		});
+
+		window.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') {
+				document.querySelectorAll('.nav-dropdown.is-open').forEach((dropdown) => {
+					dropdown.classList.remove('is-open');
+					dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+				});
+			}
+		});
+	}
+
 	setupMobileMenu();
-	document.addEventListener('astro:page-load', setupMobileMenu);
+	setupNavDropdowns();
+	document.addEventListener('astro:page-load', () => {
+		setupMobileMenu();
+		setupNavDropdowns();
+	});
 </script>
 
 <style>
@@ -245,6 +343,72 @@ const navItems = [
 		.nav-link.active {
 			color: var(--sl-color-accent-high);
 			font-weight: 600;
+		}
+
+		.nav-dropdown {
+			position: relative;
+		}
+
+		.nav-dropdown-trigger {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.25rem;
+			font-family: inherit;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+		}
+
+		.nav-dropdown-caret {
+			transition: transform 0.15s ease;
+		}
+
+		.nav-dropdown.is-open .nav-dropdown-caret {
+			transform: rotate(180deg);
+		}
+
+		.nav-dropdown-menu {
+			position: absolute;
+			top: calc(100% + 0.5rem);
+			left: 0;
+			min-width: 11rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.125rem;
+			padding: 0.375rem;
+			background-color: var(--card, var(--sl-color-gray-6));
+			border: 1px solid var(--sl-color-hairline);
+			border-radius: 0.5rem;
+			box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.25);
+			opacity: 0;
+			transform: translateY(-4px);
+			visibility: hidden;
+			pointer-events: none;
+			transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+			z-index: 10;
+		}
+
+		.nav-dropdown.is-open .nav-dropdown-menu {
+			opacity: 1;
+			transform: translateY(0);
+			visibility: visible;
+			pointer-events: auto;
+		}
+
+		.nav-dropdown-link {
+			color: var(--sl-color-gray-2);
+			font-size: var(--sl-text-sm);
+			font-weight: 500;
+			text-decoration: none;
+			padding: 0.5rem 0.625rem;
+			border-radius: 0.375rem;
+			white-space: nowrap;
+			transition: color 0.15s ease, background-color 0.15s ease;
+		}
+
+		.nav-dropdown-link:hover {
+			color: var(--sl-color-white);
+			background-color: var(--sl-color-gray-6);
 		}
 
 		.right-group {
