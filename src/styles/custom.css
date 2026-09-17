@@ -536,6 +536,89 @@ details h5 {
 }
 
 /* ==========================================================================
+   Mermaid Diagrams (Match Site Theme, Transparent Background, Rounded Nodes)
+   ========================================================================== */
+
+.mermaid,
+pre.mermaid,
+.mermaid svg {
+	background: var(--card) !important;
+	border-radius: var(--radius) !important;
+}
+
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node circle,
+.mermaid .node ellipse {
+	rx: 10px !important;
+	ry: 10px !important;
+	stroke-width: 1.5px !important;
+	fill: var(--primary-soft) !important;
+	stroke: var(--primary) !important;
+}
+
+.mermaid .nodeLabel,
+.mermaid .label,
+.mermaid text {
+	fill: var(--foreground) !important;
+	color: var(--foreground) !important;
+	font-family: var(--sl-font) !important;
+	font-weight: 600 !important;
+}
+
+.mermaid .edgeLabel,
+.mermaid .edgeLabel rect,
+.mermaid .edgeLabel span,
+.mermaid .edgeLabel p,
+.mermaid .edgeLabel foreignObject,
+.mermaid .edgeLabel foreignObject div {
+	background: var(--card) !important;
+	background-color: var(--card) !important;
+	fill: var(--card) !important;
+}
+
+.mermaid .edgeLabel span,
+.mermaid .edgeLabel p,
+.mermaid .edgeLabel foreignObject span {
+	color: var(--foreground) !important;
+	font-weight: 800 !important;
+	white-space: nowrap !important;
+	overflow: visible !important;
+}
+
+.mermaid .edgeLabel foreignObject {
+	overflow: visible !important;
+}
+
+.mermaid .edgeLabel foreignObject div {
+	color: var(--foreground) !important;
+	font-weight: 800 !important;
+	white-space: nowrap !important;
+	overflow: visible !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.mermaid .edgeLabel text {
+	fill: var(--foreground) !important;
+	font-weight: 800 !important;
+}
+
+.mermaid .flowchart-link,
+.mermaid .edgePath path {
+	stroke: var(--muted-foreground) !important;
+	stroke-width: 1.5px !important;
+}
+
+.mermaid marker path {
+	fill: var(--muted-foreground) !important;
+	stroke: var(--muted-foreground) !important;
+}
+
+/* ==========================================================================
    Pagination Prev / Next Buttons (Match Main Card Opacity)
    ========================================================================== */
 
