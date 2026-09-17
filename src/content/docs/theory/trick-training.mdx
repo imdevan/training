@@ -16,22 +16,16 @@ Add random cues at random intervals on your walks. This keeps them on their toes
 
 ## Reward flow chart
 
-Did they do what you asked?
-
-- no:
-  did they do something you thought was cute?
-  - no:
-    - neutral reward. you may say "no" in a neutral tone once with no reward.
-    - otherwise do not do anything. wait a few seconds. walk away, come back, ask again for the aciton
-      - try the cue again. only, once, in a neutral tone.
-        did they do what you asked?
-        - no:
-          - reduce the complexlixity of the ask.
-  - yes:
-    - ideally no reward.
-    - if you really want to, give verbal praise. "you're so cute" anything other than your "Positive Markers"
-      - you are still rewarding them, but not as much as if they had done what you asked and your are not "telling" them they did what you asked.
-- yes:
-  use "Yes" or "Good" cue, + treat
+```mermaid
+flowchart TD
+    A[Did they do what you asked?] -->|yes| B["Yes / Good cue + treat"]
+    A -->|no| C{Did they do something cute?}
+    C -->|no| D["Neutral reward: say 'no' once, neutral tone, no reward<br/>OR wait a few seconds, walk away, come back, retry cue once (neutral tone)"]
+    D --> E{Did they do what you asked?}
+    E -->|yes| H["Yes/Good cue + treat"]
+    E -->|no| G[Reduce the complexity of the ask]
+    C -->|yes| I["Ideally no reward."]
+    I --> J["If you really want to, give verbal praise (not a Positive Marker) — still rewarding, but less, and not 'telling' them they did what you asked"]
+```
 
 </Card>
