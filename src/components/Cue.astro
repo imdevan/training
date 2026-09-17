@@ -1,6 +1,7 @@
 ---
 interface Props {
   title: string;
+  subtitle?: string;
   blurb?: string;
   usefulFor?: string;
   howToTrain?: string;
@@ -8,11 +9,14 @@ interface Props {
   open?: boolean;
 }
 
-const { title, blurb, usefulFor, howToTrain, nonVerbal, open = false } = Astro.props;
+const { title, subtitle, blurb, usefulFor, howToTrain, nonVerbal, open = false } = Astro.props;
 ---
 
 <details class:list={['cue-accordion', { 'is-open': open }]} open={open}>
-  <summary><h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;">{title}</h4></summary>
+  <summary>
+    <h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;">{title}</h4>
+    {subtitle && <span class="cue-subtitle">{subtitle}</span>}
+  </summary>
   <div class="cue-content-wrapper" aria-hidden={!open}>
     <div class="cue-content-inner">
       {blurb && (
@@ -40,6 +44,25 @@ const { title, blurb, usefulFor, howToTrain, nonVerbal, open = false } = Astro.p
     </div>
   </div>
 </details>
+
+<style>
+  details.cue-accordion summary {
+    display: flex !important;
+    align-items: center;
+    width: 100%;
+  }
+
+  .cue-subtitle {
+    margin-left: auto;
+    padding-left: 1rem;
+    color: var(--muted-foreground);
+    opacity: 0.7;
+    font-weight: inherit;
+    font-size: 0.875em;
+    text-align: right;
+    white-space: nowrap;
+  }
+</style>
 
 <script>
   function setupCueAccordions() {
