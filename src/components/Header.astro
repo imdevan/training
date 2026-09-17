@@ -151,16 +151,29 @@ const navItems = [
 		>
 			Overview
 		</a>
-		{navItems.map((item, idx) => (
-			<a
-				href={item.href}
-				class:list={['drawer-link', { active: item.active }]}
-				aria-current={item.active ? 'page' : undefined}
-				style={`--item-index: ${idx + 1};`}
-			>
-				{item.label === 'Vocab' ? 'Vocabulary & Cues' : item.label === 'Theory' ? 'Learning Theory' : item.label}
-			</a>
-		))}
+		{navItems.flatMap((item, idx) =>
+			item.children ? (
+				item.children.map((child) => (
+					<a
+						href={child.href}
+						class:list={['drawer-link', { active: currentPath.includes(child.href) }]}
+						aria-current={currentPath.includes(child.href) ? 'page' : undefined}
+						style={`--item-index: ${idx + 1};`}
+					>
+						{child.label}
+					</a>
+				))
+			) : (
+				<a
+					href={item.href}
+					class:list={['drawer-link', { active: item.active }]}
+					aria-current={item.active ? 'page' : undefined}
+					style={`--item-index: ${idx + 1};`}
+				>
+					{item.label === 'Vocab' ? 'Vocabulary & Cues' : item.label}
+				</a>
+			)
+		)}
 	</nav>
 </div>
 
