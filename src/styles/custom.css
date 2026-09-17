@@ -645,3 +645,18 @@ pre.mermaid,
 .pagination-links a:hover .link-title {
 	color: var(--primary) !important;
 }
+
+/* ==========================================================================
+   Heading Anchor Link Icons (Hide by Default on Touch Devices)
+   ========================================================================== */
+
+@media (hover: none) {
+	.sl-markdown-content .sl-anchor-link {
+		opacity: 0;
+	}
+
+	.sl-markdown-content .sl-anchor-link:focus,
+	.sl-markdown-content .sl-heading-wrapper:hover .sl-anchor-link {
+		opacity: 1;
+	}
+}
