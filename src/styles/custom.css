@@ -660,3 +660,28 @@ pre.mermaid,
 		opacity: 1;
 	}
 }
+
+/* ==========================================================================
+   Mermaid Loading State (Match Frosted Glass Theme)
+   ========================================================================== */
+
+pre.mermaid:not([data-processed]) {
+	background: var(--surface) !important;
+	border: 1px solid color-mix(in oklab, var(--border) 70%, transparent) !important;
+	border-radius: var(--radius) !important;
+	animation: mermaid-pulse 1.6s ease-in-out infinite !important;
+}
+
+[data-theme='dark'] pre.mermaid:not([data-processed]) {
+	background: var(--surface) !important;
+}
+
+@keyframes mermaid-pulse {
+	0%,
+	100% {
+		opacity: 0.6;
+	}
+	50% {
+		opacity: 1;
+	}
+}
