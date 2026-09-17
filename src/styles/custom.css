@@ -535,6 +535,24 @@ details h5 {
 	box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.06) !important;
 }
 
+/* Purple for "Resources" / reminder note boxes, matching the tip color (e.g. "Extinction Burst"). */
+.starlight-aside--note {
+	--sl-color-asides-text-accent: var(--sl-color-purple-high) !important;
+	--sl-color-asides-border: var(--sl-color-purple) !important;
+	background-color: var(--sl-color-purple-low) !important;
+}
+
+/* Pastel pink for the disclaimer box. */
+.starlight-aside--caution {
+	--sl-color-asides-text-accent: #b23a82 !important;
+	--sl-color-asides-border: #f5c2e7 !important;
+	background-color: color-mix(in oklab, #f5c2e7 25%, transparent) !important;
+}
+
+[data-theme='dark'] .starlight-aside--caution {
+	--sl-color-asides-text-accent: #f5c2e7 !important;
+}
+
 /* ==========================================================================
    Mermaid Diagrams (Match Site Theme, Transparent Background, Rounded Nodes)
    ========================================================================== */
