@@ -201,8 +201,8 @@ details {
 /* First content panel (Page Title header card) */
 .content-panel:first-of-type .sl-container {
 	background: var(--surface);
-	backdrop-filter: blur(24px) saturate(180%);
 	-webkit-backdrop-filter: blur(24px) saturate(180%);
+	backdrop-filter: blur(24px) saturate(180%);
 	border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
 	border-radius: var(--radius);
 	padding: 1.75rem 2rem;
@@ -260,8 +260,8 @@ details {
 header.header {
 	position: fixed;
 	z-index: 100 !important;
-	backdrop-filter: blur(24px) saturate(180%);
 	-webkit-backdrop-filter: blur(24px) saturate(180%);
+	backdrop-filter: blur(24px) saturate(180%);
 	background-color: var(--sl-color-bg-nav) !important;
 	border-bottom: 1px solid var(--sl-color-hairline) !important;
 }
@@ -374,8 +374,8 @@ nav[aria-labelledby="starlight__on-this-page--mobile"],
 		max-width: calc(100% - 1.5rem) !important;
 		padding: 1.25rem !important;
 		background: var(--surface) !important;
-		backdrop-filter: blur(24px) saturate(180%) !important;
 		-webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+		backdrop-filter: blur(24px) saturate(180%) !important;
 		border: 1px solid color-mix(in oklab, var(--border) 70%, transparent) !important;
 		border-radius: var(--radius) !important;
 		margin-top: 0.75rem !important;
@@ -415,8 +415,8 @@ nav[aria-labelledby="starlight__on-this-page--mobile"],
 
 details {
 	background: var(--card) !important;
-	backdrop-filter: blur(24px) saturate(180%) !important;
 	-webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+	backdrop-filter: blur(24px) saturate(180%) !important;
 	border: 1px solid var(--border) !important;
 	border-radius: 0.875rem !important;
 	padding: 1rem 1.25rem !important;
@@ -529,8 +529,8 @@ details h5 {
 
 .starlight-aside {
 	border-radius: var(--radius) !important;
-	backdrop-filter: blur(20px) saturate(180%) !important;
 	-webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+	backdrop-filter: blur(20px) saturate(180%) !important;
 	border: 1px solid var(--sl-color-hairline) !important;
 	box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.06) !important;
 }
@@ -642,8 +642,8 @@ pre.mermaid,
 
 .pagination-links a {
 	background: var(--surface) !important;
-	backdrop-filter: blur(24px) saturate(180%) !important;
 	-webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+	backdrop-filter: blur(24px) saturate(180%) !important;
 	border: 1px solid color-mix(in oklab, var(--border) 70%, transparent) !important;
 	border-radius: var(--radius) !important;
 	padding: 1.25rem 1.5rem !important;
