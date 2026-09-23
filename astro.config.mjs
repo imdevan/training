@@ -29,6 +29,7 @@ export default defineConfig({
 		}),
 		starlight({
 			title: 'Training with Dev',
+			lastUpdated: true,
 			components: {
 				Header: './src/components/Header.astro',
 			},
