@@ -14,7 +14,7 @@ const { title, subtitle, blurb, usefulFor, howToTrain, nonVerbal, open = false }
 
 <details class:list={['cue-accordion', { 'is-open': open }]} open={open}>
   <summary>
-    <h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;">{title}</h4>
+    <h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;"><span class="cue-title-text"><span class="cue-quote-wrap cue-quote-open" aria-hidden="true"><span class="cue-quote-inner">&ldquo;</span></span>{title}<span class="cue-quote-wrap cue-quote-close" aria-hidden="true"><span class="cue-quote-inner">&rdquo;</span></span></span></h4>
     {subtitle && <span class="cue-subtitle">{subtitle}</span>}
   </summary>
   <div class="cue-content-wrapper" aria-hidden={!open}>
@@ -51,6 +51,47 @@ const { title, subtitle, blurb, usefulFor, howToTrain, nonVerbal, open = false }
     align-items: center;
     width: 100%;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  .cue-title-text {
+    display: inline-block;
+    transform: translateX(0);
+    transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .cue-quote-wrap {
+    display: inline-grid;
+    grid-template-columns: 0fr;
+    vertical-align: top;
+    transition: grid-template-columns 300ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .cue-quote-inner {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 300ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .cue-quote-open .cue-quote-inner {
+    padding-right: 0.15em;
+  }
+
+  .cue-quote-close .cue-quote-inner {
+    padding-left: 0.15em;
+  }
+
+  details.cue-accordion.is-open .cue-title-text {
+    transform: translateX(0.35em);
+  }
+
+  details.cue-accordion.is-open .cue-quote-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  details.cue-accordion.is-open .cue-quote-inner {
+    opacity: 1;
   }
 
   .cue-subtitle {
