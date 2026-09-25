@@ -32,6 +32,7 @@ export default defineConfig({
 			lastUpdated: true,
 			components: {
 				Header: './src/components/Header.astro',
+				PageTitle: './src/components/PageTitle.astro',
 			},
 			customCss: ['./src/styles/custom.css'],
 			sidebar: [
