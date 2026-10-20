@@ -1,0 +1,122 @@
+---
+import Card from './Card.astro';
+
+interface Props {
+  title: string;
+  id?: string;
+  open?: boolean;
+}
+
+const { title, open = false } = Astro.props;
+const id =
+  Astro.props.id ??
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+---
+
+<Card id={id} class="collapsible-card">
+  <details class:list={['cue-accordion', 'collapsible-card-details', { 'is-open': open }]} open={open}>
+    <summary>
+      <h2 class="collapsible-card-title">{title}</h2>
+    </summary>
+    <div class="cue-content-wrapper" aria-hidden={!open}>
+      <div class="cue-content-inner">
+        <div class="collapsible-card-body">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </details>
+</Card>
+
+<style>
+  /* The glass card is the visual container; strip the global details card styling */
+  .collapsible-card-details {
+    background: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    overflow: visible;
+  }
+
+  /* Rendered by Card, so outside this component's style scope */
+  :global(.glass-card.collapsible-card) {
+    --card-pad-y: 1.5rem;
+    --card-pad-x: 1.75rem;
+    /* Padding moves onto the summary so the whole closed card is clickable */
+    padding: 0 !important;
+    transition: border-color 0.2s ease;
+  }
+
+  @media (min-width: 50rem) {
+    :global(.glass-card.collapsible-card) {
+      --card-pad-y: 2rem;
+      --card-pad-x: 2.25rem;
+    }
+  }
+
+  :global(.glass-card.collapsible-card:hover),
+  :global(.glass-card.collapsible-card:has(> details.is-open)) {
+    border-color: var(--primary);
+  }
+
+  .collapsible-card-details summary {
+    display: flex !important;
+    align-items: center;
+    width: 100%;
+    margin: 0 !important;
+    padding: var(--card-pad-y) var(--card-pad-x);
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .collapsible-card-details:focus,
+  .collapsible-card-details:focus-visible,
+  .collapsible-card-details summary:focus,
+  .collapsible-card-details summary:focus-visible,
+  .collapsible-card-details summary:active {
+    outline: none !important;
+  }
+
+  .collapsible-card-details summary:hover {
+    color: var(--foreground);
+  }
+
+  .collapsible-card-title {
+    display: inline;
+    margin: 0 !important;
+    color: inherit;
+  }
+
+  /* Padding lives on an inner element so the 0fr row can still collapse fully */
+  .collapsible-card-body {
+    padding: 0 var(--card-pad-x) var(--card-pad-y);
+  }
+
+  .collapsible-card-body > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .collapsible-card-body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Pull content up into the summary's bottom padding: 1rem gap below the title.
+     Element + double class to outrank custom.css (Astro's scope adds no specificity) */
+  details.collapsible-card-details.cue-accordion.is-open > :global(.cue-content-wrapper) {
+    margin-top: calc(1rem - var(--card-pad-y)) !important;
+  }
+</style>
+
+<script>
+  import { initAccordions } from '../scripts/accordion';
+
+  initAccordions();
+  document.addEventListener('astro:page-load', initAccordions);
+</script>

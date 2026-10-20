@@ -107,63 +107,8 @@ const { title, subtitle, blurb, usefulFor, howToTrain, nonVerbal, open = false }
 </style>
 
 <script>
-  function setupCueAccordions() {
-    document.querySelectorAll<HTMLDetailsElement>('details.cue-accordion').forEach((details) => {
-      if (details.dataset.cueBound === 'true') return;
-      details.dataset.cueBound = 'true';
+  import { initAccordions } from '../scripts/accordion';
 
-      const summary = details.querySelector('summary');
-      const content = details.querySelector<HTMLElement>('.cue-content-wrapper');
-      if (!summary || !content) return;
-
-      if (details.hasAttribute('open')) {
-        details.classList.add('is-open');
-      }
-
-      let closeTimeout: number | undefined;
-
-      details.addEventListener('click', (e) => {
-        const target = e.target as HTMLElement;
-        if (target.closest('.cue-content-wrapper')) return;
-
-        e.preventDefault();
-        window.clearTimeout(closeTimeout);
-
-        const willOpen = !details.classList.contains('is-open');
-
-        if (willOpen) {
-          details.setAttribute('open', '');
-          // Force layout reflow so transition starts cleanly from 0fr / opacity 0
-          void content.offsetHeight;
-          requestAnimationFrame(() => {
-            details.classList.add('is-open');
-            content.removeAttribute('aria-hidden');
-          });
-        } else {
-          details.classList.remove('is-open');
-          content.setAttribute('aria-hidden', 'true');
-
-          const handleTransitionEnd = (evt: TransitionEvent) => {
-            if (evt.target !== content || evt.propertyName !== 'grid-template-rows') return;
-            content.removeEventListener('transitionend', handleTransitionEnd);
-            if (!details.classList.contains('is-open')) {
-              details.removeAttribute('open');
-            }
-          };
-
-          content.addEventListener('transitionend', handleTransitionEnd);
-
-          closeTimeout = window.setTimeout(() => {
-            content.removeEventListener('transitionend', handleTransitionEnd);
-            if (!details.classList.contains('is-open')) {
-              details.removeAttribute('open');
-            }
-          }, 350);
-        }
-      });
-    });
-  }
-
-  setupCueAccordions();
-  document.addEventListener('astro:page-load', setupCueAccordions);
+  initAccordions();
+  document.addEventListener('astro:page-load', initAccordions);
 </script>
