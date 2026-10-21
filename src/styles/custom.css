@@ -664,6 +664,18 @@ pre.mermaid,
 	color: var(--primary) !important;
 }
 
+/* Put Next above Previous once the grid stacks. Starlight's grid fits two
+   minmax(18rem) columns + 1rem gap, so it stacks below 37rem */
+.pagination-links {
+	container-type: inline-size;
+}
+
+@container (max-width: 37rem) {
+	.pagination-links a[rel='next'] {
+		order: -1;
+	}
+}
+
 /* ==========================================================================
    Heading Anchor Link Icons (Hide by Default on Touch Devices)
    ========================================================================== */
