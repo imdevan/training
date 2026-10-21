@@ -5,9 +5,10 @@ interface Props {
   title: string;
   id?: string;
   open?: boolean;
+  draft?: boolean;
 }
 
-const { title, open = false } = Astro.props;
+const { title, open = false, draft = false } = Astro.props;
 const id =
   Astro.props.id ??
   title
@@ -16,7 +17,7 @@ const id =
     .replace(/^-|-$/g, '');
 ---
 
-<Card id={id} class="collapsible-card">
+<Card id={id} class="collapsible-card" draft={draft}>
   <details class:list={['cue-accordion', 'collapsible-card-details', { 'is-open': open }]} open={open}>
     <summary>
       <h2 class="collapsible-card-title">{title}</h2>

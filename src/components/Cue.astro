@@ -7,43 +7,46 @@ interface Props {
   howToTrain?: string;
   nonVerbal?: string;
   open?: boolean;
+  draft?: boolean;
 }
 
-const { title, subtitle, blurb, usefulFor, howToTrain, nonVerbal, open = false } = Astro.props;
+const { title, subtitle, blurb, usefulFor, howToTrain, nonVerbal, open = false, draft = false } = Astro.props;
 ---
 
-<details class:list={['cue-accordion', { 'is-open': open }]} open={open}>
-  <summary>
-    <h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;"><span class="cue-title-text"><span class="cue-quote-wrap cue-quote-open" aria-hidden="true"><span class="cue-quote-inner">&ldquo;</span></span>{title}<span class="cue-quote-wrap cue-quote-close" aria-hidden="true"><span class="cue-quote-inner">&rdquo;</span></span></span></h4>
-    {subtitle && <span class="cue-subtitle">{subtitle}</span>}
-  </summary>
-  <div class="cue-content-wrapper" aria-hidden={!open}>
-    <div class="cue-content-inner">
-      {blurb && (
-        <p>{blurb}</p>
-      )}
-      {usefulFor && (
-        <div>
-          <h5>When it is useful</h5>
-          <p>{usefulFor}</p>
-        </div>
-      )}
-      {howToTrain && (
-        <div>
-          <h5>High level how to train</h5>
-          <p>{howToTrain}</p>
-        </div>
-      )}
-      {nonVerbal && (
-        <div>
-          <h5>Non-verbal cue</h5>
-          <p>{nonVerbal}</p>
-        </div>
-      )}
-      <slot />
+{!draft && (
+  <details class:list={['cue-accordion', { 'is-open': open }]} open={open}>
+    <summary>
+      <h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;"><span class="cue-title-text"><span class="cue-quote-wrap cue-quote-open" aria-hidden="true"><span class="cue-quote-inner">&ldquo;</span></span>{title}<span class="cue-quote-wrap cue-quote-close" aria-hidden="true"><span class="cue-quote-inner">&rdquo;</span></span></span></h4>
+      {subtitle && <span class="cue-subtitle">{subtitle}</span>}
+    </summary>
+    <div class="cue-content-wrapper" aria-hidden={!open}>
+      <div class="cue-content-inner">
+        {blurb && (
+          <p>{blurb}</p>
+        )}
+        {usefulFor && (
+          <div>
+            <h5>When it is useful</h5>
+            <p>{usefulFor}</p>
+          </div>
+        )}
+        {howToTrain && (
+          <div>
+            <h5>High level how to train</h5>
+            <p>{howToTrain}</p>
+          </div>
+        )}
+        {nonVerbal && (
+          <div>
+            <h5>Non-verbal cue</h5>
+            <p>{nonVerbal}</p>
+          </div>
+        )}
+        <slot />
+      </div>
     </div>
-  </div>
-</details>
+  </details>
+)}
 
 <style>
   details.cue-accordion summary {

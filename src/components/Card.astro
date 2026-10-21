@@ -3,14 +3,17 @@ interface Props {
   id?: string;
   class?: string;
   style?: string;
+  draft?: boolean;
 }
 
-const { id, class: className = '', style = '' } = Astro.props;
+const { id, class: className = '', style = '', draft = false } = Astro.props;
 ---
 
-<div id={id} class:list={['glass-card', className]} style={style}>
-  <slot />
-</div>
+{!draft && (
+  <div id={id} class:list={['glass-card', className]} style={style}>
+    <slot />
+  </div>
+)}
 
 <style>
   .glass-card {
