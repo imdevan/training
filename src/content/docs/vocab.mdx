@@ -4,13 +4,27 @@ description: Reference guide for markers, core cues, intermediate commands, loca
 ---
 
 import Card from "../../components/Card.astro";
+import abcs from "../../assets/abcs.webp";
+import CollapsibleCard from "../../components/CollapsibleCard.astro";
 import Cue from "../../components/Cue.astro";
 import { Image } from "astro:assets";
-import abcs from "../../assets/abcs.webp";
 
-<Card>
-## Definitions
+<CollapsibleCard title="Definitions">
 
+### Vocabulary
+
+In order to shorten the communication gap as much as possible. Anytime I am hoping for
+  an obvervable behavior from our furry friends, I:
+- request a behavior, **only**,  with cues on this list
+- respond and reward, **only**, with markers from this list
+
+This allows the dog more space to focus on learning the behavior and less on understanding your intent.
+
+##### Weird Unverified Thought, I Believe
+
+Dogs speak in 1-2 syllable pharases (barks, and growls). So when we **need** to be understood, 
+  we should meet them half way and stick to 1-2 syllable phrases. 
+ 
 ### Operant Training
 
 Operant Training is one of the most commonly used ways to shape behaviors.
@@ -37,7 +51,12 @@ A behavior is a broad term to apply to any observable action. To make a square/r
 
 A marker always comes after a behavior and helps shaping the current behavior to a new behavior. A positive marker should almost always be paired with a treat.
 
-</Card>
+Markers are similar to verbal cues, but they are used to note specific things to the dog. They are a part of the reward structure and so separate from cues and don't really need to be trained in the same way.
+
+Markers are a lot like training with a clicker. In fact a clicker is just another marker and I think they are great tools. 
+Like a cliker the thing that makes the marker valuable is consistency.
+
+</CollapsibleCard>
 
 <Card draft>
 ## My Philosophy
@@ -57,11 +76,6 @@ A marker always comes after a behavior and helps shaping the current behavior to
 <Card>
 ## Markers
 
-Markers are similar to verbal cues, but they are used to note specific things to the dog. They are a part of the reward structure and so separate from cues and don't really need to be trained in the same way.
-
-One could also use a clicker instead-of or in addition to verbal markers. I personally prefer verbal markers as it is one less physical device needed.
-
-These are markers that I use when working with dogs. IMO, they don't really need to be trained as their association comes over time and consistent usage.
 
 <Cue
   title="Yes!"
@@ -268,6 +282,12 @@ These "tricks" are fun and flashy, but also help serve an important role in keep
 />
 
 <Cue
+  title="Twirl"
+  blurb="Dog spins a complete 360-degree circle in a designated direction (spin left or spin right)."
+/>
+
+
+<Cue
   title="Roll Over"
   blurb="From a down position, dog rolls completely over onto their back and returns to down position."
 >
@@ -278,6 +298,9 @@ Tutorial](https://www.youtube.com/watch?v=IsJ0VdeOJcg&t=7s)
 
 </Cue>
 
+<Cue title="Crawl">
+</Cue>
+
 <Cue
   title="Jump Through Hoop"
   blurb=""
@@ -286,6 +309,10 @@ Tutorial](https://www.youtube.com/watch?v=IsJ0VdeOJcg&t=7s)
 :::note[Resources] - [Jump Through Hoop
 Tutorial](https://www.youtube.com/watch?v=arW12GQCY7E)
 :::
+
+</Cue>
+
+<Cue title="Nose">
 
 </Cue>
 
