@@ -211,6 +211,12 @@ details {
 		0 12px 32px -12px color-mix(in oklab, var(--foreground) 14%, transparent);
 }
 
+/* Docs pages render their title in a TitleCard, leaving this panel empty
+   unless there's a notice (wip, draft, fallback) to show */
+.content-panel:first-of-type:has(> .sl-container:empty) {
+	display: none;
+}
+
 /* Second content panel (Markdown content holding individual Cards) */
 .content-panel:nth-of-type(2) .sl-container {
 	background: transparent;
@@ -465,6 +471,11 @@ details summary:hover {
 
 /* Animate existing summary chevron next to title with 300ms ease-out */
 details.cue-accordion summary::before {
+	/* chevron is drawn with currentColor, so it stays neutral on summary hover */
+	background-color: var(--foreground);
+	/* flex centering sits the chevron ~0.75px below cap height center; translate
+	   composes with the rotate transforms below instead of overriding them */
+	translate: 0 -1px;
 	transition: transform 300ms cubic-bezier(0, 0, 0.2, 1) !important;
 }
 
@@ -560,8 +571,13 @@ details h5 {
 .mermaid,
 pre.mermaid,
 .mermaid svg {
-	background: var(--card) !important;
-	border-radius: var(--radius) !important;
+	background: transparent !important;
+}
+
+/* mermaid caps the SVG at its natural width (inline max-width), so center it */
+.mermaid svg {
+	display: block;
+	margin-inline: auto;
 }
 
 .mermaid .node rect,
@@ -687,31 +703,6 @@ pre.mermaid,
 
 	.sl-markdown-content .sl-anchor-link:focus,
 	.sl-markdown-content .sl-heading-wrapper:hover .sl-anchor-link {
-		opacity: 1;
-	}
-}
-
-/* ==========================================================================
-   Mermaid Loading State (Match Frosted Glass Theme)
-   ========================================================================== */
-
-pre.mermaid:not([data-processed]) {
-	background: var(--surface) !important;
-	border: 1px solid color-mix(in oklab, var(--border) 70%, transparent) !important;
-	border-radius: var(--radius) !important;
-	animation: mermaid-pulse 1.6s ease-in-out infinite !important;
-}
-
-[data-theme='dark'] pre.mermaid:not([data-processed]) {
-	background: var(--surface) !important;
-}
-
-@keyframes mermaid-pulse {
-	0%,
-	100% {
-		opacity: 0.6;
-	}
-	50% {
 		opacity: 1;
 	}
 }
