@@ -1,5 +1,5 @@
-// Renders every ```mermaid block in the docs to an SVG in src/generated/mermaid,
-// which src/plugins/mermaid.mjs inlines at build time. Run locally (it
+// Renders every ```mermaid block in the docs to src/generated/mermaid/<name>.svg
+// (name from the fence meta), which src/plugins/mermaid.mjs inlines at build time. Run locally (it
 // needs a Chromium) and commit the output, so remote builds don't need a browser.
 //
 // Uses $CHROMIUM_PATH if set, otherwise the first system Chromium/Chrome found,
@@ -11,9 +11,9 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { chromium } from 'playwright-core';
 import { contentDir, fontStylesheet, mermaidConfig, outputDir } from '../mermaid.config.mjs';
-import { mermaidHash } from '../src/plugins/mermaid-hash.mjs';
+import { diagramName, hashComment, parseSvgFile, sourceHash } from '../src/plugins/mermaid-source.mjs';
 
-const MERMAID_BLOCK = /^```mermaid[^\n]*\n([\s\S]*?)\n```[ \t]*$/gm;
+const MERMAID_BLOCK = /^```mermaid([^\n]*)\n([\s\S]*?)\n```[ \t]*$/gm;
 
 const SYSTEM_BROWSERS = [
 	'/usr/bin/chromium',
@@ -26,9 +26,16 @@ async function findDiagrams(dir) {
 	const diagrams = new Map();
 	for (const entry of await readdir(dir, { recursive: true, withFileTypes: true })) {
 		if (!entry.isFile() || !/\.mdx?$/.test(entry.name)) continue;
-		const source = await readFile(join(entry.parentPath, entry.name), 'utf8');
-		for (const [, code] of source.matchAll(MERMAID_BLOCK)) {
-			diagrams.set(mermaidHash(code), code.trim());
+		const path = join(entry.parentPath, entry.name);
+		const source = await readFile(path, 'utf8');
+		for (const [, meta, code] of source.matchAll(MERMAID_BLOCK)) {
+			const name = diagramName(meta, path);
+			const hash = sourceHash(code);
+			const existing = diagrams.get(name);
+			if (existing && existing.hash !== hash) {
+				throw new Error(`mermaid: "${name}" is used by ${existing.path} and ${path} with different diagrams`);
+			}
+			diagrams.set(name, { hash, code: code.trim(), path });
 		}
 	}
 	return diagrams;
@@ -45,11 +52,15 @@ async function clearContentCache() {
 const diagrams = await findDiagrams(contentDir);
 await mkdir(outputDir, { recursive: true });
 
-const existing = new Set((await readdir(outputDir)).filter((f) => f.endsWith('.svg')));
-const toRender = [...diagrams].filter(([hash]) => !existing.has(`${hash}.svg`));
+const existing = new Map();
+for (const file of (await readdir(outputDir)).filter((f) => f.endsWith('.svg'))) {
+	const { hash } = parseSvgFile(await readFile(join(outputDir, file), 'utf8'));
+	existing.set(file.replace(/\.svg$/, ''), hash);
+}
+const toRender = [...diagrams].filter(([name, { hash }]) => existing.get(name) !== hash);
 
-// Remove SVGs for diagrams that were edited or deleted
-const stale = [...existing].filter((file) => !diagrams.has(file.replace(/\.svg$/, '')));
+// Remove SVGs for diagrams that were renamed or deleted
+const stale = [...existing.keys()].filter((name) => !diagrams.has(name)).map((name) => `${name}.svg`);
 for (const file of stale) {
 	await rm(join(outputDir, file));
 	console.log(`mermaid: removed stale ${file}`);
@@ -79,13 +90,13 @@ try {
 		window.mermaid.initialize(config);
 	}, mermaidConfig);
 
-	for (const [hash, code] of toRender) {
+	for (const [name, { hash, code }] of toRender) {
 		const svg = await page.evaluate(
 			async ({ id, code }) => (await window.mermaid.render(id, code)).svg,
-			{ id: `mermaid-${hash}`, code },
+			{ id: `mermaid-${name}`, code },
 		);
-		await writeFile(join(outputDir, `${hash}.svg`), svg);
-		console.log(`mermaid: rendered ${hash}.svg`);
+		await writeFile(join(outputDir, `${name}.svg`), `${hashComment(hash)}\n${svg}`);
+		console.log(`mermaid: rendered ${name}.svg`);
 	}
 } finally {
 	await browser.close();
