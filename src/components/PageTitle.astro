@@ -1,8 +1,6 @@
 ---
 import { Icon } from '@astrojs/starlight/components';
 
-const PAGE_TITLE_ID = '_top';
-
 const { wip } = Astro.locals.starlightRoute.entry.data as { wip?: boolean | string };
 
 const DEFAULT_WIP_MESSAGE =
@@ -10,8 +8,6 @@ const DEFAULT_WIP_MESSAGE =
 
 const wipMessage = wip === true ? DEFAULT_WIP_MESSAGE : wip || undefined;
 ---
-
-<h1 id={PAGE_TITLE_ID}>{Astro.locals.starlightRoute.entry.data.title}</h1>
 
 {wipMessage && (
 	<p class="wip-notice sl-flex">
@@ -22,14 +18,6 @@ const wipMessage = wip === true ? DEFAULT_WIP_MESSAGE : wip || undefined;
 
 <style>
 	@layer starlight.core {
-		h1 {
-			margin-top: 1rem;
-			font-size: var(--sl-text-h1);
-			line-height: var(--sl-line-height-headings);
-			font-weight: 600;
-			color: var(--sl-color-white);
-		}
-
 		.wip-notice {
 			border: 1px solid var(--sl-color-orange);
 			padding: 0.75em 1em;
