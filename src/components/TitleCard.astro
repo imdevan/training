@@ -1,0 +1,30 @@
+---
+import Card from './Card.astro';
+
+interface Props {
+  class?: string;
+  draft?: boolean;
+}
+
+const { class: className = '', draft = false } = Astro.props;
+
+// Starlight links the "Overview" TOC entry to #_top, so the h1 keeps that id
+const PAGE_TITLE_ID = '_top';
+---
+
+<Card class:list={['title-card', className]} draft={draft}>
+  <h1 id={PAGE_TITLE_ID} class="title-card-heading">
+    <slot name="title">{Astro.locals.starlightRoute.entry.data.title}</slot>
+  </h1>
+  <slot />
+</Card>
+
+<style>
+  .title-card-heading {
+    font-size: var(--sl-text-h1);
+    line-height: var(--sl-line-height-headings);
+    font-weight: 900;
+    font-weight: 1000;
+    color: var(--sl-color-white);
+  }
+</style>
