@@ -652,6 +652,20 @@ pre.mermaid,
 	stroke: var(--muted-foreground) !important;
 }
 
+/* Nodes with a `click … href "#…"` link jump to their description below */
+/* Nodes with a `click … href "#…"` link scroll to their description below
+   (src/scripts/mermaid-links.ts). SVG has no box-shadow, so the hover glow is
+   a drop-shadow faded in from a transparent one */
+.mermaid a .node {
+	cursor: pointer;
+	filter: drop-shadow(0 0 8px color-mix(in oklab, var(--primary) 0%, transparent));
+	transition: filter 0.2s ease;
+}
+
+.mermaid a:is(:hover, :focus-visible) .node {
+	filter: drop-shadow(0 0 8px color-mix(in oklab, var(--primary) 40%, transparent));
+}
+
 /* ==========================================================================
    Pagination Prev / Next Buttons (Match Main Card Opacity)
    ========================================================================== */
