@@ -458,11 +458,14 @@ details summary {
 	outline: none;
 }
 
+/* No ring around the title; keyboard focus shows on the cue's border, like hover */
 details.cue-accordion:focus-visible,
-details.cue-accordion summary:focus-visible {
-	outline: 2px solid var(--primary);
-	outline-offset: 2px;
-	border-radius: 0.5rem;
+details.cue-accordion summary:is(:focus, :focus-visible) {
+	outline: none;
+}
+
+details.cue-accordion:has(summary:focus-visible) {
+	border-color: var(--primary) !important;
 }
 
 details summary:hover {
