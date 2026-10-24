@@ -8,7 +8,8 @@ import mermaid from './src/plugins/mermaid.mjs';
 export default defineConfig({
 	site: 'https://devan.gg',
 	base: '/training',
-	// Diagrams are pre-rendered by `bun run mermaid`; see scripts/render-mermaid.mjs
+	// Diagrams are pre-rendered to src/generated/mermaid, re-rendering any that are
+	// stale as pages build; see src/plugins/mermaid.mjs
 	markdown: {
 		processor: satteri({ mdastPlugins: [mermaid] }),
 	},

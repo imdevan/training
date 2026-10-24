@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "scripts": {
     "mermaid": "node scripts/render-mermaid.mjs",
-    "predev": "bun run mermaid",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
