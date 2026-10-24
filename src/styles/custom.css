@@ -581,6 +581,8 @@ pre.mermaid,
 .mermaid svg {
 	display: block;
 	margin-inline: auto;
+	/* Edge nodes' hover glow extends past the viewBox */
+	overflow: visible;
 }
 
 .mermaid .node rect,
