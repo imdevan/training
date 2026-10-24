@@ -14,18 +14,22 @@ Use the same markers everytime. It is boring for you, but makes it clear to the 
 
 Add random cues at random intervals on your walks. This keeps them on their toes!
 
-## Reward flow chart
+## Behavior Training Flow Chart
 
 ```mermaid reward-flow-chart
 flowchart TD
-    A[Did they do what you asked?] -->|yes| B["Yes / Good cue + treat"]
-    A -->|no| C{Did they do something cute?}
-    C -->|no| D["Neutral reward: say 'no' once, neutral tone, no reward<br/>OR wait a few seconds, walk away, come back, retry cue once (neutral tone)"]
-    D --> E{Did they do what you asked?}
-    E -->|yes| H["Yes/Good cue + treat"]
-    E -->|no| G[Reduce the complexity of the ask]
-    C -->|yes| I["Ideally no reward."]
-    I --> J["If you really want to, give verbal praise (not a Positive Marker) — still rewarding, but less, and not 'telling' them they did what you asked"]
+    A((Give cue, wait a few seconds for dog to process)) --> B{Did they do the thing?}
+    B -->|yes| By@{ shape: dbl-circ, label: "Reward! 🎉" }
+    B -->|no| C{Are you training or having fun?}
+    C -->|fun| Cn[Cute Correction]
+    C -->|training| Cy[Neutral Correction]
+    Cn --> D[Wait a few seconds to reset]
+    Cy --> D
+    D --> E[Give cue a second time, no change in tone or anything]
+    E --> F{Did they do the thing?}
+    F -->|yes| Fy@{ shape: dbl-circ, label: "Reward! 🎉" }
+    F -->|no| G[Simplify]
+    G --> A
 ```
 
 </TitleCard>
