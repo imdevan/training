@@ -177,6 +177,9 @@ const navItems = [
 </div>
 
 <script>
+	// Header is on every page, so it loads the diagram link handler too
+	import { initMermaidLinks } from '../scripts/mermaid-links';
+
 	function setupMobileMenu() {
 		const toggleBtn = document.getElementById('mobile-menu-toggle');
 		const closeBtn = document.getElementById('mobile-menu-close');
@@ -297,6 +300,7 @@ const navItems = [
 
 	setupMobileMenu();
 	setupNavDropdowns();
+	initMermaidLinks();
 	document.addEventListener('astro:page-load', () => {
 		setupMobileMenu();
 		setupNavDropdowns();
