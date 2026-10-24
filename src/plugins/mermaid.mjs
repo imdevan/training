@@ -28,6 +28,8 @@ export default defineMdastPlugin({
 			throw new Error(`mermaid: ${file} is out of date with ${where}, run \`bun run mermaid\``);
 		}
 
-		ctx.replaceNode(node, { raw: `<div class="mermaid">${svg}</div>`, mdxExpressions: false });
+		// An html node is emitted verbatim; `{ raw }` would re-parse the SVG as
+		// markdown (smart quotes in its <style>, text after <br> dropped)
+		ctx.replaceNode(node, { type: 'html', value: `<div class="mermaid">${svg}</div>` });
 	},
 });
