@@ -1,6 +1,9 @@
 ---
+import { slugify } from '../utils/slugify';
+
 interface Props {
   title: string;
+  id?: string;
   subtitle?: string;
   blurb?: string;
   usefulFor?: string;
@@ -11,10 +14,11 @@ interface Props {
 }
 
 const { title, subtitle, blurb, usefulFor, howToTrain, nonVerbal, open = false, draft = false } = Astro.props;
+const id = Astro.props.id ?? slugify(title);
 ---
 
 {!draft && (
-  <details class:list={['cue-accordion', { 'is-open': open }]} open={open}>
+  <details id={id} class:list={['cue-accordion', { 'is-open': open }]} open={open}>
     <summary>
       <h4 style="display: inline; font-size: inherit; font-weight: bold; margin: 0;"><span class="cue-title-text"><span class="cue-quote-wrap cue-quote-open" aria-hidden="true"><span class="cue-quote-inner">&ldquo;</span></span>{title}<span class="cue-quote-wrap cue-quote-close" aria-hidden="true"><span class="cue-quote-inner">&rdquo;</span></span></span></h4>
       {subtitle && <span class="cue-subtitle">{subtitle}</span>}

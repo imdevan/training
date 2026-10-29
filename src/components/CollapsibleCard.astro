@@ -1,5 +1,6 @@
 ---
 import Card from './Card.astro';
+import { slugify } from '../utils/slugify';
 
 interface Props {
   title: string;
@@ -9,12 +10,7 @@ interface Props {
 }
 
 const { title, open = false, draft = false } = Astro.props;
-const id =
-  Astro.props.id ??
-  title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+const id = Astro.props.id ?? slugify(title);
 ---
 
 <Card id={id} class="collapsible-card" draft={draft}>
