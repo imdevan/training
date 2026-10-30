@@ -16,7 +16,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Training with Dev',
-      favicon: '/compy-guy.webp',
+      favicon: 'https://devan.gg/compy-guy.png',
       head: [
         { tag: 'meta', attrs: { property: 'og:image', content: 'https://devan.gg/training/homepage-screenshot.webp' } },
         { tag: 'meta', attrs: { property: 'og:image:width', content: '800' } },
