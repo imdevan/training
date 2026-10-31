@@ -1,0 +1,37 @@
+---
+// Just the icon background: no Starlight chrome, no fade
+import ParallaxBackground from '../components/ParallaxBackground.astro';
+import '../styles/custom.css';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/compy-guy.png`} type="image/png" />
+		<meta name="robots" content="noindex" />
+		<title>Training with Dev</title>
+		<script is:inline>
+			// Match the theme picked elsewhere on the site
+			const stored = localStorage.getItem('starlight-theme');
+			const dark = stored ? stored === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+			document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+		</script>
+	</head>
+	<body>
+		<ParallaxBackground fade={false} density={1.5} iconScale={2} randomize />
+		<div class="wall"></div>
+	</body>
+</html>
+
+<style>
+	body {
+		margin: 0;
+	}
+
+	/* Gives the page its scroll length; the background sizes itself to it */
+	.wall {
+		height: 600vh;
+	}
+</style>

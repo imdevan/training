@@ -19,6 +19,19 @@ const iconsMap = {
   star: renderIcon(faStar)?.html.join("") || "",
   rainbow: renderIcon(faRainbow)?.html.join("") || "",
 };
+
+interface Props {
+  /** Fade the icons out towards the bottom of the viewport */
+  fade?: boolean;
+  /** Multiplier on how many icons fill the page */
+  density?: number;
+  /** Multiplier on icon size */
+  iconScale?: number;
+  /** New layout on every page load instead of the same one each time */
+  randomize?: boolean;
+}
+
+const { fade = true, density = 1, iconScale = 1, randomize = false } = Astro.props;
 ---
 
 <div
@@ -31,12 +44,18 @@ const iconsMap = {
   aria-hidden="true"
   class="parallax-container"
   data-icons={JSON.stringify(iconsMap)}
+  data-fade={String(fade)}
+  data-density={density}
+  data-icon-scale={iconScale}
+  data-randomize={String(randomize)}
 ></div>
 
-<div
-  aria-hidden="true"
-  class="parallax-fade-overlay"
-></div>
+{fade && (
+  <div
+    aria-hidden="true"
+    class="parallax-fade-overlay"
+  ></div>
+)}
 
 <style>
   .parallax-gradient-backdrop {
@@ -142,13 +161,13 @@ const iconsMap = {
     };
   }
 
-  function computeCols(width: number): number {
-    const raw = Math.round(width / CFG.pxPerCol);
-    return Math.max(CFG.minCols, Math.min(CFG.maxCols, raw));
+  function computeCols(width: number, density: number): number {
+    const raw = Math.round((width * Math.sqrt(density)) / CFG.pxPerCol);
+    return Math.max(CFG.minCols, Math.min(Math.round(CFG.maxCols * Math.sqrt(density)), raw));
   }
 
-  function computeRows(pageHeight: number): number {
-    const raw = Math.round(pageHeight / CFG.pxPerRow);
+  function computeRows(pageHeight: number, density: number): number {
+    const raw = Math.round((pageHeight * Math.sqrt(density)) / CFG.pxPerRow);
     return Math.max(CFG.minRows, raw);
   }
 
@@ -183,11 +202,26 @@ const iconsMap = {
       iconsData = JSON.parse(container.dataset.icons || "{}");
     } catch {}
 
-    const iconKeys = Object.keys(iconsData);
+    // Dogs are listed several times so they come up more often
+    const DOG_WEIGHT = 3;
+    const iconKeys = Object.keys(iconsData).flatMap((key) =>
+      key === "dog" ? Array(DOG_WEIGHT).fill(key) : [key],
+    );
     if (iconKeys.length === 0) return;
 
     // Snapshot the page height once — accordion / cue expansions won't change it
     const lockedHeight = document.documentElement.scrollHeight;
+
+    // Icons drift up as the page scrolls, leaving an empty band at the bottom
+    // that the fade normally hides. Without the fade, fill past the page end
+    // (clipped by the container) so they scroll into that band instead.
+    const span =
+      container.dataset.fade === "false" ? 1 + CFG.scrollMaxMultiplier * CFG.scrollJitterMax : 1;
+    const density = Number(container.dataset.density) || 1;
+    const iconScale = Number(container.dataset.iconScale) || 1;
+    // Picked once per load so resizes keep the same layout
+    const seed =
+      container.dataset.randomize === "true" ? Math.floor(Math.random() * 2 ** 32) : 0xb077e;
 
     let items: Array<{
       el: HTMLElement;
@@ -199,9 +233,9 @@ const iconsMap = {
     function generate(cols: number, rows: number) {
       container.innerHTML = "";
       items = [];
-      const rng = mulberry32(0xb077e);
+      const rng = mulberry32(seed);
       const cellW = 100 / cols;
-      const cellH = 100 / rows;
+      const cellH = (100 * span) / rows;
 
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -216,10 +250,10 @@ const iconsMap = {
           const rowNorm = rows > 1 ? row / (rows - 1) : 0;
           const sizeExp = CFG.scaleBias * (1 - rowNorm) + (1 / CFG.scaleBias) * rowNorm;
           const t = Math.pow(rng(), sizeExp);
-          const scale = CFG.minScale + t * (CFG.maxScale - CFG.minScale);
+          const scale = (CFG.minScale + t * (CFG.maxScale - CFG.minScale)) * iconScale;
           const rotation = CFG.minRotation + rng() * (CFG.maxRotation - CFG.minRotation);
 
-          const scaleNorm = (scale - CFG.minScale) / (CFG.maxScale - CFG.minScale);
+          const scaleNorm = (scale / iconScale - CFG.minScale) / (CFG.maxScale - CFG.minScale);
           const opacity = CFG.minOpacity + scaleNorm * (CFG.maxOpacity - CFG.minOpacity);
           const baseSpeed =
             CFG.scrollMinMultiplier + scaleNorm * (CFG.scrollMaxMultiplier - CFG.scrollMinMultiplier);
@@ -241,8 +275,8 @@ const iconsMap = {
       }
     }
 
-    let currentCols = computeCols(window.innerWidth);
-    const lockedRows = computeRows(lockedHeight);
+    let currentCols = computeCols(window.innerWidth, density);
+    const lockedRows = computeRows(lockedHeight * span, density);
 
     // Set container height once — never update it after init
     container.style.height = `${lockedHeight}px`;
@@ -282,7 +316,7 @@ const iconsMap = {
 
     const onResize = () => {
       // Only recalculate columns on viewport width change — rows stay locked
-      const newCols = computeCols(window.innerWidth);
+      const newCols = computeCols(window.innerWidth, density);
       if (newCols !== currentCols) {
         currentCols = newCols;
         generate(currentCols, lockedRows);

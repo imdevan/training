@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import mermaid from './src/plugins/mermaid.mjs';
 
@@ -14,6 +15,9 @@ export default defineConfig({
     processor: satteri({ mdastPlugins: [mermaid] }),
   },
   integrations: [
+    // Starlight adds its own sitemap unless one is configured here; this one
+    // leaves out /bg, which is only reachable by its URL
+    sitemap({ filter: (page) => !page.endsWith('/bg/') }),
     starlight({
       title: 'Training with Dev',
       favicon: 'https://devan.gg/compy-guy.png',
